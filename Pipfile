@@ -6,6 +6,13 @@ name = "pypi"
 [packages]
 django = "==5.0"
 django-extensions = "*"
+argon2-cffi = "*"
+django-environ = "*"
+cryptography = "*"
+pytesseract = "*"
+pillow = "*"
+transformers = "*"
+torch = "*"
 
 [dev-packages]
 

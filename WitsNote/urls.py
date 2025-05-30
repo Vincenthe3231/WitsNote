@@ -1,11 +1,13 @@
 from django.urls import path
-from . import views
+from WitsNote.views import WitsNoteView
+
+WitsNoteView = WitsNoteView()
 
 urlpatterns = [
-    path('', views.index, name='home'),
-    path('contact/', views.contact, name='contact'),
-    path('user-profile/', views.user_profile, name='user_profile' ),
-    path('hello/', views.say_hello),
-    path('add/', views.add),
+    path('', WitsNoteView.index, name='home'),
+    path('contact/', WitsNoteView.contact, name='contact'),
+    path('topics/', WitsNoteView.topic_listing, name='topic_listing'),
+    path('hello/', WitsNoteView.say_hello),
+    path('add/', WitsNoteView.add),
     
 ]
