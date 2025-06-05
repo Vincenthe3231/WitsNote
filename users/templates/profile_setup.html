@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Form</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-8 space-y-6 md:p-10">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Create Your Profile</h1>
+
+        <form action="profile_setup" method="POST" class="space-y-5">
+            {% csrf_token %}
+            <!-- First Name -->
+            <div>
+                <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                <input
+                    type="text"
+                    id="first_name"
+                    name="first_name"
+                    placeholder="Enter your first name"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Last Name -->
+            <div>
+                <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                <input
+                    type="text"
+                    id="last_name"
+                    name="last_name"
+                    placeholder="Enter your last name"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Profession -->
+            <div>
+                <label for="profession" class="block text-sm font-medium text-gray-700 mb-1">Profession</label>
+                <input
+                    type="text"
+                    id="profession"
+                    name="profession"
+                    placeholder="e.g., Software Engineer, Designer"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Work Link -->
+            <div>
+                <label for="work_link" class="block text-sm font-medium text-gray-700 mb-1">Work Link</label>
+                <textarea
+                    id="work_link"
+                    name="work_link"
+                    rows="3"
+                    placeholder="Link to your portfolio, LinkedIn, or personal website"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out resize-y"
+                ></textarea>
+            </div>
+
+            <!-- Skills -->
+            <div>
+                <label for="skills" class="block text-sm font-medium text-gray-700 mb-1">Skills</label>
+                <textarea
+                    id="skills"
+                    name="skills"
+                    rows="4"
+                    placeholder="e.g., Python, JavaScript, Django, React, UI/UX Design (comma-separated)"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out resize-y"
+                    required
+                ></textarea>
+                <p class="mt-2 text-sm text-gray-500">
+                    Enter your skills separated by commas.
+                </p>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button
+                    type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out transform hover:scale-105"
+                >
+                    Save Profile
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -337,32 +337,32 @@
                 </ul>
             </div>
 
+            {% for profile in profiles %}
             <div class="main-info">
-                {% for user in users %}
                 <table>
                     <tr>
                         <td>User Id</td>
-                        <td><a href="#">{{ user.id }}</a></td>
+                        <td><a href="#">{{ profile.id }}</a></td>
                     </tr>
                     <tr>
                         <td>Name</td>
-                        <td>{{ user.username }}</td>
+                        <td>{{ users.first_name}} {{ users.last_name }}</td>
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <td><a href="#">{{ user.email }}</a></td>
+                        <td><a href="#">{{ users.email }}</a></td>
                     </tr>
                     <tr>
                         <td>Phone</td>
-                        <td>123 456 7890</td>
+                        <td>{{ profile.phone }}</td>
                     </tr>
                     <tr>
                         <td>Profession</td>
-                        <td>Web Developer and Designer</td>
+                        <td>{{ profile.profession }}</td>
                     </tr>
                 </table>
-                {% endfor %}
             </div>
+            {% endfor p %}
         </div>
     </div>
 </body>

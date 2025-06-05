@@ -13,6 +13,7 @@ pytesseract = "*"
 pillow = "*"
 transformers = "*"
 torch = "*"
+django-phonenumber-field = {extras = ["phonenumberslite"], version = "*"}
 
 [dev-packages]
 
