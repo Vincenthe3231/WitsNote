@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Background image with cover and center positioning using Django static files */
+            background-image: url("{% static 'images/digital-art-moon-wallpaper.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem; /* Add some padding around the edges for smaller screens */
+            position: relative; /* Needed for the absolute positioned blur container */
+        }
+
+        /* This div will create the blurred overlay effect */
+        .backdrop-blur-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white overlay */
+            backdrop-filter: blur(5px); /* The magic blur effect as per your specification */
+            -webkit-backdrop-filter: blur(5px); /* For Safari compatibility, matching the blur */
+            z-index: 0; /* Ensure it's behind the form */
+        }
+
+        /* Custom styles applied via IDs for specific colors */
+        button#login-button {
+            background-color: #b34cf3; /* Your specified background color for the login button */
+        }
+
+        button#login-button:hover {
+            background-color: #D9A5F9; /* Your specified hover background color for the login button */
+        }
+
+        div#register-link a { /* Target the anchor tag inside the div */
+            color: #c679c6; /* Your specified link color for register link */
+        }
+
+        div#register-link a:hover { /* Target the anchor tag inside the div for hover */
+            color: #a020f0; /* Your specified hover link color for register link */
+        }
+
+        div#login-form-container {
+            background-color: #fcfafe; /* Your specified background color for the form container */
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Blurred Background Overlay -->
+    <div class="backdrop-blur-container"></div>
+
+    <!-- Login Form Container -->
+    <div id="login-form-container" class="relative z-10 w-full max-w-md rounded-xl shadow-2xl p-8 space-y-6 md:p-10 transform translate-y-0 hover:-translate-y-1 transition duration-300 ease-in-out">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Welcome Back!</h1>
+
+        <!-- Error Message Display -->
+        {% if error %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+                <strong class="font-bold">Error!</strong>
+                <span class="block sm:inline">{{ error }}</span>
+            </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}" class="space-y-5">
+            <!-- Django CSRF Token -->
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button
+                    id="login-button"
+                    type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-md text-lg font-semibold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out transform hover:scale-105"
+                >
+                    Login
+                </button>
+            </div>
+        </form>
+
+        <!-- Register Link -->
+        <div id="register-link" class="text-center mt-6">
+            <a href="{% url 'register' %}" class="font-medium transition duration-150 ease-in-out">
+                Don't have an account? Register here
+            </a>
+        </div>
+    </div>
+</body>
+</html>

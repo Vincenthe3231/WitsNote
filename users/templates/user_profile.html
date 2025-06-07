@@ -304,7 +304,7 @@
             <div class="profile-info-section">
                 <div class="name-edit">
                     <h2></h2>
-                    <button class="edit-pro-btn">Edit Pro</button>
+                    <a href="{% url 'logout' %}"><button class="edit-pro-btn">Log Out</button></a>
                 </div>
                 <p class="profession">Web Developer and Designer</p>
                 <p class="rankings">RANKINGS: 8/10</p>
@@ -342,7 +342,7 @@
                 <table>
                     <tr>
                         <td>User Id</td>
-                        <td><a href="#">{{ profile.id }}</a></td>
+                        <td><a href="#">{{ users.id }}</a></td>
                     </tr>
                     <tr>
                         <td>Name</td>

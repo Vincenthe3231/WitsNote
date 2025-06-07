@@ -26,6 +26,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('WitsNote.urls')),
     path('user/', include('users.urls')),
+    path('auth/', include('Authentication.urls'))
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Don't forget to include the newly created module into INSTALLED_APPS of settings.py   

@@ -82,9 +82,15 @@ https://templatemo.com/tm-590-topic-listing
                             </li>
                         </ul>
 
-                        <div class="d-none d-lg-block">
-                            <a href="{% url 'user_profile' %}" class="navbar-icon bi-person smoothscroll"></a>
-                        </div>
+                        {% if user.is_authenticated %}
+                            <div class="d-none d-lg-block">
+                                <a href="{% url 'user_profile' %}" class="navbar-icon bi-person smoothscroll"></a>
+                            </div>
+                        {% else %}
+                            <div class="d-none d-lg-block">
+                                <a href="{% url 'login' %}" class="navbar-icon bi-person smoothscroll"></a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </nav>

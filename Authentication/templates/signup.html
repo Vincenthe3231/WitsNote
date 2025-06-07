@@ -1,0 +1,168 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Background image with cover and center positioning */
+            background-image: url("{% static 'images/single-tree-field-moon-it.jpg' %}"); /* Placeholder image URL */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem; /* Add some padding around the edges for smaller screens */
+            position: relative; /* Needed for the absolute positioned blur container */
+        }
+
+        /* This div will create the blurred overlay effect */
+        .backdrop-blur-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white overlay */
+            backdrop-filter: blur(5px); /* The magic blur effect */
+            -webkit-backdrop-filter: blur(10px); /* For Safari compatibility */
+            z-index: 0; /* Ensure it's behind the form */
+        }
+
+        button#signup-button{
+            background-color: #b34cf3;
+        }
+
+        button#signup-button:hover {
+            background-color: #D9A5F9;
+        }
+
+        div#login-link {
+            color: #c679f6;
+        }
+
+        div#login-link:hover{
+            color: #a020f0
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Blurred Background Overlay -->
+    <div class="backdrop-blur-container"></div>
+
+    <!-- Signup Form Container -->
+    <div class="relative z-10 w-full max-w-md bg-white rounded-xl shadow-2xl p-8 space-y-6 md:p-10 transform translate-y-0 hover:-translate-y-1 transition duration-300 ease-in-out">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Create Your Account</h1>
+
+        <form method="post" action="{% url 'register' %}" class="space-y-5">
+            <!-- Django CSRF Token -->
+            {% csrf_token %}
+
+            <!-- First Name -->
+            <div>
+                <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                <input
+                    type="text"
+                    id="first_name"
+                    name="first_name"
+                    placeholder="Enter your first name"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Last Name -->
+            <div>
+                <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                <input
+                    type="text"
+                    id="last_name"
+                    name="last_name"
+                    placeholder="Enter your last name"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Username -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Choose a username"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a strong password"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Confirm Password -->
+             <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    placeholder="Confirm your password"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+                    required
+                >
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button
+                    id="signup-button"
+                    type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-md text-lg font-semibold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out transform hover:scale-105"
+                >
+                    Sign Up
+                </button>
+            </div>
+        </form>
+
+        <!-- Login Link -->
+        <div id="login-link" class="text-center mt-6">
+            <a href="{% url 'login' %}" class="font-medium transition duration-150 ease-in-out">
+                Already have an account? Login here
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -8,7 +8,7 @@ class UserProfileView:
     def user_profile(self, request):
         # profile = UserProfile.objects.get(user=request.user)
         profiles = UserProfile.objects.all()
-        users = User.objects.get(id=2)
+        users = request.user    # Get the record of authenticated users
         return render(request, "user_profile.html", {'profiles': profiles, 'users': users})
 
     # @login_required
