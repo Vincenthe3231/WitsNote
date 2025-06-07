@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib import messages
+from users.models import UserProfile
 
 # Create your views here.
 class Authentication:
+    
     def login(self, request):
         # Handle user login and login page render
         if request.method == "POST":
@@ -13,7 +16,11 @@ class Authentication:
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
-                return redirect("home")
+                messages.success(request, f"Welcome, {user.first_name}!")
+                if not UserProfile.objects.filter(user=user).exists():
+                    return redirect("profile_setup")
+                else:
+                    return redirect("home")
             else:
                 return render(request, "login.html", {"error": "Invalid credentials."})
 

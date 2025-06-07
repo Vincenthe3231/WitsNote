@@ -1,38 +1,36 @@
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from users.models import UserProfile
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 # Create your views here.
 class UserProfileView:
     def user_profile(self, request):
         # profile = UserProfile.objects.get(user=request.user)
-        profiles = UserProfile.objects.all()
+        profiles = UserProfile.objects.get(user=request.user)
         users = request.user    # Get the record of authenticated users
         return render(request, "user_profile.html", {'profiles': profiles, 'users': users})
 
     # @login_required
     def profile_setup(self, request):
         if request.method == "POST":
-            first_name = request.POST.get("first_name")
-            last_name = request.POST.get("last_name")
+            phone = request.POST.get("phone")
             profession = request.POST.get("profession")
             work_link = request.POST.get("work_link")
             skills = request.POST.get("skills")
 
-            self.create_profile(request, first_name, last_name, profession, work_link, skills)
+            self.create_profile(request, phone, profession, work_link, skills)
         return render(request, "profile_setup.html")
 
-    def create_profile(self, first_name, last_name, profession, work_link, skills):
+    def create_profile(self, request, phone, profession, work_link, skills):
         # Save the user profile information
             user_profile = UserProfile.objects.create(
-                # user=request.user,
-                first_name=first_name,
-                last_name=last_name,
+                user=request.user,
+                phone=phone,
                 profession=profession,
                 work_link=work_link,
-                skills=skills
+                skills=skills,
             )
             user_profile.save()
-            return redirect("/")
+            return redirect("home")
         # return render(request, "profile_setup.html")
