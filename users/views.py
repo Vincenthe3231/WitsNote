@@ -1,10 +1,16 @@
 # from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from users.models import UserProfile
+from cryptography.fernet import Fernet
+from django.conf import settings
 # from django.contrib.auth.models import User
 
 # Create your views here.
 class UserProfileView:
+    
+    def __init__(self):
+        self.__key = settings.ENCRYPTION_KEY
+    
     def user_profile(self, request):
         # profile = UserProfile.objects.get(user=request.user)
         profiles = UserProfile.objects.get(user=request.user)
@@ -18,19 +24,21 @@ class UserProfileView:
             profession = request.POST.get("profession")
             work_link = request.POST.get("work_link")
             skills = request.POST.get("skills")
+            
+            cipher = Fernet(self.__key)
+            phone_encryption = cipher.encrypt(phone.encode())
 
-            self.create_profile(request, phone, profession, work_link, skills)
+            return self.create_profile(request, phone_encryption, profession, work_link, skills)
         return render(request, "profile_setup.html")
 
     def create_profile(self, request, phone, profession, work_link, skills):
         # Save the user profile information
-            user_profile = UserProfile.objects.create(
-                user=request.user,
-                phone=phone,
-                profession=profession,
-                work_link=work_link,
-                skills=skills,
-            )
-            user_profile.save()
-            return redirect("home")
-        # return render(request, "profile_setup.html")
+        user_profile = UserProfile.objects.create(
+            user=request.user,
+            phone=phone,
+            profession=profession,
+            work_link=work_link,
+            skills=skills
+        )
+        user_profile.save()
+        return redirect("home")
