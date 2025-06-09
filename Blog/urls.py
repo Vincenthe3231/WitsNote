@@ -26,7 +26,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('WitsNote.urls')),
     path('user/', include('users.urls')),
-    path('auth/', include('Authentication.urls'))
+    path('auth/', include('Authentication.urls')),
+    path('posts/', include('Post.urls')),
+    
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

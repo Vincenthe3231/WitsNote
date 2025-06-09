@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'WitsNote',
     'users',
     'Authentication',
-    
+    'Post',
 ]
 
 MIDDLEWARE = [
