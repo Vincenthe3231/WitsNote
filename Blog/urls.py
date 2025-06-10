@@ -28,7 +28,7 @@ urlpatterns = [
     path('user/', include('users.urls')),
     path('auth/', include('Authentication.urls')),
     path('posts/', include('Post.urls')),
-    
+    path('summarization/', include('AI_Summarization.urls'))
 ]
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
