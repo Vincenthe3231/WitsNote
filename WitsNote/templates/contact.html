@@ -84,9 +84,21 @@ https://templatemo.com/tm-590-topic-listing
                             </li>
                         </ul>
 
-                        <div class="d-none d-lg-block">
-                            <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
-                        </div>
+                        {% if user.is_authenticated %}
+                            <div class="d-none d-lg-block">
+                                <a href="{% url 'user_profile' %}" class="navbar-icon bi-person smoothscroll" title="Your Profile"></a>
+                            </div>
+                            <a href="{% url 'create_post' %}" class="btn btn-success d-flex align-items-center justify-content-center px-4 py-2 rounded-pill shadow fs-5 fw-semibold" role="button" aria-label="Create New Post">
+                                Create New Post
+                            </a>
+                        {% else %}
+                            <div class="d-none d-lg-block">
+                                <a href="{% url 'login' %}" class="navbar-icon bi-person smoothscroll" title="Login"></a>
+                            </div>
+                             <a href="{% url 'login' %}" class="btn btn-success d-flex align-items-center justify-content-center px-4 py-2 rounded-pill shadow fs-5 fw-semibold" role="button" aria-label="Create New Post">
+                                Create New Post
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </nav>

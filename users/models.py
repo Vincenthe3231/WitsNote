@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     phone = models.CharField(max_length=200)
     profession = models.CharField(max_length=40)
     work_link = models.URLField(max_length=200, help_text="Link to portfolio or LinkedIn")

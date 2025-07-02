@@ -1,0 +1,178 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap"
+        rel="stylesheet">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'css/templatemo-topic-listing.css' %}" rel="stylesheet">
+</head>
+
+<body id="top">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="bi-back"></i>
+                <span>WitsNote</span>
+            </a>
+
+            <div class="d-lg-none ms-auto me-4">
+                <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="{% url 'home' %}">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="{% url 'home' %}#section_2">Browse Topics</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="{% url 'home' %}#section_3">How it works</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="{% url 'home' %}#section_4">FAQs</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link click-scroll" href="{% url 'home' %}#section_5">Contact</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+
+                        <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{% url 'topic_listing' %}">Topics Listing</a></li>
+
+                            <li><a class="dropdown-item" href="{% url 'contact' %}">Contact Form</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                {% if user.is_authenticated %}
+                <div class="d-none d-lg-block">
+                    <a href="{% url 'user_profile' %}" class="navbar-icon bi-person smoothscroll"
+                        title="Your Profile"></a>
+                </div>
+                <a href="{% url 'create_post' %}"
+                    class="btn btn-success d-flex align-items-center justify-content-center px-4 py-2 rounded-pill shadow fs-5 fw-semibold"
+                    role="button" aria-label="Create New Post">
+                    Create New Post
+                </a>
+                {% else %}
+                <div class="d-none d-lg-block">
+                    <a href="{% url 'login' %}" class="navbar-icon bi-person smoothscroll" title="Login"></a>
+                </div>
+                <a href="{% url 'login' %}"
+                    class="btn btn-success d-flex align-items-center justify-content-center px-4 py-2 rounded-pill shadow fs-5 fw-semibold"
+                    role="button" aria-label="Create New Post">
+                    Create New Post
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <main>
+        <header class="site-header d-flex flex-column justify-content-center align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-12 text-center">
+                        <h2 class="mb-0">Choose a Post Template</h2>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="section-padding">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-12">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="custom-block bg-white shadow-lg">
+                                    <a href="{% url 'standard_blog_post' %}" class="d-flex flex-column text-center p-4">
+                                        <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
+                                            <i class="bi-pencil"></i>
+                                        </div>
+                                        <h5 class="mb-2">Standard Blog Post</h5>
+                                        <p class="text-muted">A classic template for general articles and discussions.</p>
+                                        <span class="btn custom-btn mt-3">Use Template</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="custom-block bg-white shadow-lg">
+                                    <a href="#" class="d-flex flex-column text-center p-4">
+                                        <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
+                                            <i class="bi-chat-dots"></i>
+                                        </div>
+                                        <h5 class="mb-2">Q&A Format</h5>
+                                        <p class="text-muted">Ideal for answering specific questions from your audience.</p>
+                                        <span class="btn custom-btn mt-3">Use Template</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="custom-block bg-white shadow-lg">
+                                    <a href="#" class="d-flex flex-column text-center p-4">
+                                        <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
+                                            <i class="bi-list-ol"></i>
+                                        </div>
+                                        <h5 class="mb-2">Listicle Post</h5>
+                                        <p class="text-muted">Perfect for "Top 10" or "How-To" style articles.</p>
+                                        <span class="btn custom-btn mt-3">Use Template</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="custom-block bg-white shadow-lg">
+                                    <a href="#" class="d-flex flex-column text-center p-4">
+                                        <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
+                                            <i class="bi-image"></i>
+                                        </div>
+                                        <h5 class="mb-2">Photo Gallery Post</h5>
+                                        <p class="text-muted">Showcase a collection of images with descriptions.</p>
+                                        <span class="btn custom-btn mt-3">Use Template</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- JAVASCRIPT FILES -->
+    <script src="{%static 'js/jquery.min.js' %}"></script>
+    <script src="{%static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{%static 'js/jquery.sticky.js' %}"></script>
+    <script src="{%static 'js/click-scroll.js' %}"></script>
+    <script src="{%static 'js/custom.js' %}"></script>
+</body>
+
+</html>

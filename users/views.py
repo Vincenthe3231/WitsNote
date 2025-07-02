@@ -10,12 +10,14 @@ class UserProfileView:
     
     def __init__(self):
         self.__key = settings.ENCRYPTION_KEY
+        self.__cipher = Fernet(self.__key)
     
     def user_profile(self, request):
         # profile = UserProfile.objects.get(user=request.user)
         profiles = UserProfile.objects.get(user=request.user)
         users = request.user    # Get the record of authenticated users
-        return render(request, "user_profile.html", {'profiles': profiles, 'users': users})
+        phone_decryption = self.__cipher.decrypt(profiles.phone).decode()
+        return render(request, "user_profile.html", {'profiles': profiles, 'users': users, 'phone_decryption': phone_decryption})
 
     # @login_required
     def profile_setup(self, request):
@@ -24,9 +26,8 @@ class UserProfileView:
             profession = request.POST.get("profession")
             work_link = request.POST.get("work_link")
             skills = request.POST.get("skills")
-            
-            cipher = Fernet(self.__key)
-            phone_encryption = cipher.encrypt(phone.encode())
+
+            phone_encryption = self.__cipher.encrypt(phone.encode())
 
             return self.create_profile(request, phone_encryption, profession, work_link, skills)
         return render(request, "profile_setup.html")

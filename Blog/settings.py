@@ -33,6 +33,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 ENCRYPTION_KEY = env('ENCRYPTION_KEY')
 
+GEMINI_API_KEY = env('GEMINI_API_KEY')
+GEMINI_API_URL = env('GEMINI_API_URL')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG = env.bool('DEBUG', default=False)
 
@@ -51,7 +54,7 @@ INSTALLED_APPS = [
     'WitsNote',
     'users',
     'Authentication',
-    'Post',
+    
 ]
 
 MIDDLEWARE = [

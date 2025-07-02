@@ -7,7 +7,9 @@ urlpatterns = [
     path('', WitsNoteView.index, name='home'),
     path('contact/', WitsNoteView.contact, name='contact'),
     path('topics/', WitsNoteView.topic_listing, name='topic_listing'),
-    path('hello/', WitsNoteView.say_hello),
-    path('add/', WitsNoteView.add),
+    path('create-post/', WitsNoteView.create_post, name='create_post'),
+    path('create-post/standard-blog-post/', WitsNoteView.create_standard_blog_post, name="standard_blog_post"),
+    # path('hello/', WitsNoteView.say_hello),
+    # path('add/', WitsNoteView.add),
     
 ]
