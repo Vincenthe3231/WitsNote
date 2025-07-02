@@ -24,8 +24,8 @@ async function callGeminiAPI(prompt, loadingElement) {
     let chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
     const payload = { contents: chatHistory };
-    const apiKey = window.GEMINI_API_KEY;
-    const apiUrl = window.GEMINI_API_URL + apiKey;
+    const apiKey = window.AppConfig.GEMINI_API_KEY;
+    const apiUrl = window.AppConfig.GEMINI_API_URL + apiKey;
 
     try {
         const response = await fetch(apiUrl, {
