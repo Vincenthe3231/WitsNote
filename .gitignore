@@ -2,4 +2,4 @@
 /.virtualenvs
 
 # Ignore environment variables
-# .env
+.env
