@@ -9,11 +9,11 @@ django-extensions = "*"
 argon2-cffi = "*"
 django-environ = "*"
 cryptography = "*"
-pytesseract = "*"
-pillow = "*"
 transformers = "*"
 torch = "*"
 django-phonenumber-field = {extras = ["phonenumberslite"], version = "*"}
+pytesseract = "*"
+pillow = "*"
 
 [dev-packages]
 

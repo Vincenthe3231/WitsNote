@@ -8,7 +8,9 @@ from django.utils.crypto import get_random_string
 class Post(models.Model):
     title = models.CharField(max_length=200)
     thumbnail = models.ImageField(upload_to='thumbnails/')
+    introduction = models.TextField()
     content = models.TextField()
+    conclusion = models.TextField()
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)

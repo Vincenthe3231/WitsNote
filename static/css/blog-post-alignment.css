@@ -1,0 +1,64 @@
+/* Custom styles for loading spinners and output areas */
+.spinner-border {
+    margin-left: 10px;
+}
+
+.generated-output {
+    border: 1px solid #e9ecef;
+    padding: 15px;
+    border-radius: 0.25rem;
+    background-color: #f8f9fa;
+}
+
+/* Custom styles for centering the main content and aligning header elements
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            Align to the top 
+            min-height: 100vh;
+            Ensure it takes full viewport height 
+            background-color: #f8f9fa;
+            Light background for the page 
+        }*/
+
+.container.my-5 {
+    max-width: 800px;
+    /* Limit the width of the content for better readability */
+    width: 100%;
+    /* Ensure it's responsive */
+    padding: 40px 15px;
+    /* Add some padding on smaller screens */
+}
+
+.header-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    /* Space below the header meta */
+}
+
+.header-meta .author-info {
+    flex-grow: 1;
+    /* Allow author info to take available space */
+    text-align: left;
+}
+
+.header-meta .published-date {
+    text-align: right;
+    white-space: nowrap;
+    /* Prevent date from wrapping */
+}
+
+textarea.form-control-plaintext {
+    resize: none;
+    overflow: hidden;
+    min-height: 80px;
+    max-height: none;
+    /* Minimum height for the textarea */
+    line-height: 1.6;
+    /* Adjust line height for readability */
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width and height */
+}

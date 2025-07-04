@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Post
 from django.http import HttpResponse
-from Blog import settings
+from django.conf import settings
 # from django.contrib.auth.models import User, auth
 
 # Create your views here.
@@ -27,12 +27,32 @@ class WitsNoteView:
     def post_detail(self, request, post_id):
         post = Post.objects.get(id=post_id)
         return render(request, "post-detail.html", {'post': post})
-    
+
     def create_standard_blog_post(self, request):
         context = {
             'gemini_api_key': settings.GEMINI_API_KEY,
-            'gemini_api_url': settings.GEMINI_API_URL
+            'gemini_api_url': settings.GEMINI_API_URL,
+            'author': request.user.username
         }
+        
+        if request.method == "POST":
+            title = request.POST.get("title")
+            published_date = request.POST.get("published_date")
+            introduction = request.POST.get("introduction")
+            main_content = request.POST.get("main_content")
+            conclusion = request.POST.get("conclusion")
+
+            # Here you would typically save the post to the database
+            # For example:
+            Post.objects.create(
+                title=title,
+                published_date=published_date,
+                introduction=introduction,
+                main_content=main_content,
+                conclusion=conclusion,
+                author=request.user.username
+            )
+
         return render(request, "standard-blog-post.html", context)
 
     def say_hello(self, request):
