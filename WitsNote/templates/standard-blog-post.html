@@ -17,14 +17,15 @@
 <body id="top">
     {% include 'navbar.html' %}
     <main class="container my-5">
-        <form method="post" action="{% url 'standard_blog_post' %}">
+        <form method="post" action="{% url 'post_dispatcher' form_type='standard_blog_post' %}">
+            <!-- <input type="hidden" name="form_type" value="standard"> -->
             {% csrf_token %}
 
             {% include 'masthead.html' %}
 
             <section class="mb-4">
-                <h2>Introduction</h2>
-                <textarea id="introductionText" class="form-control-plaintext" rows="4" placeholder="This is the introduction to the blog post. It sets the stage for what the reader can expect and introduces the main topic."></textarea>
+                <h2>Introduction</h2><i class="bi bi-plus"></i>
+                <textarea name="introduction" id="introductionText" class="form-control-plaintext" rows="4" required placeholder="This is the introduction to the blog post. It sets the stage for what the reader can expect and introduces the main topic."></textarea>
                 <button id="introSummaryBtn" class="btn btn-primary mt-2">✨ Summarize Introduction</button>
                 <div id="introSummaryOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Summary:</strong> <span id="introSummaryText"></span>
@@ -33,11 +34,12 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
+                <div class="imageContainer"></div>
             </section>
 
             <section class="mb-4">
                 <h2>Main Content</h2>
-                <textarea name="main_content" id="mainContentText" class="form-control-plaintext" rows="8" placeholder="This is the main content of the blog post. It should be detailed and provide all the necessary information, arguments, or stories. For example, if this blog post is about the benefits of remote work, this section would discuss increased flexibility, reduced commute times, access to a global talent pool, and potential cost savings for businesses. It might also touch upon challenges like maintaining team cohesion or ensuring productivity, and how to overcome them. The content here should be substantial enough for summarization and for generating a meaningful conclusion."></textarea>
+                <textarea name="main_content" id="mainContentText" class="form-control-plaintext" rows="8" required placeholder="This is the main content of the blog post. It should be detailed and provide all the necessary information, arguments, or stories. For example, if this blog post is about the benefits of remote work, this section would discuss increased flexibility, reduced commute times, access to a global talent pool, and potential cost savings for businesses. It might also touch upon challenges like maintaining team cohesion or ensuring productivity, and how to overcome them. The content here should be substantial enough for summarization and for generating a meaningful conclusion."></textarea>
                 <button id="summarizeBtn" class="btn btn-primary mt-2">✨ Summarize Main Content</button>
                 <div id="summaryOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Summary:</strong> <span id="summaryText"></span>
@@ -46,11 +48,12 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
+                <div class="imageContainer"></div>
             </section>
 
             <section class="mb-4">
                 <h2>Conclusion</h2>
-                <textarea name="conclusion" id="conclusionText" class="form-control-plaintext" rows="4" placeholder="This is the conclusion of the blog post. It should summarize the key points and offer a final thought or call to action. (Click 'Generate Conclusion' to get a new one!)"></textarea>
+                <textarea name="conclusion" id="conclusionText" class="form-control-plaintext" rows="4" required placeholder="This is the conclusion of the blog post. It should summarize the key points and offer a final thought or call to action. (Click 'Generate Conclusion' to get a new one!)"></textarea>
                 <button id="generateConclusionBtn" class="btn btn-primary mt-2">✨ Generate Conclusion</button>
                 <div id="conclusionOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Generated Conclusion:</strong> <span id="generatedConclusionText"></span>
@@ -60,6 +63,12 @@
                     </div>
                 </div>
             </section>
+            </section>
+            <div class="d-flex justify-content-end mt-4"> 
+                <button type="submit" id="createPostBtn" class="btn custom-btn">Create</button>
+            </div>
+        </form>
+    </main>
         </form>
     </main>
     {% include 'footer.html' %}

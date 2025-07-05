@@ -10,6 +10,10 @@
     background-color: #f8f9fa;
 }
 
+body#top{
+    background-color: #80d0c7;
+}
+
 /* Custom styles for centering the main content and aligning header elements
         body {
             display: flex;
@@ -61,4 +65,6 @@ textarea.form-control-plaintext {
     /* Adjust line height for readability */
     box-sizing: border-box;
     /* Include padding and border in the element's total width and height */
+    text-align: justify;
+    text-indent: 2em;
 }

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Post
 from django.http import HttpResponse
 from django.conf import settings
+from WitsNote.template.handlers.standard_blog_post import StandardBlogPostHandler
 # from django.contrib.auth.models import User, auth
 
 # Create your views here.
@@ -36,24 +37,22 @@ class WitsNoteView:
         }
         
         if request.method == "POST":
-            title = request.POST.get("title")
-            published_date = request.POST.get("published_date")
-            introduction = request.POST.get("introduction")
-            main_content = request.POST.get("main_content")
-            conclusion = request.POST.get("conclusion")
-
-            # Here you would typically save the post to the database
-            # For example:
-            Post.objects.create(
-                title=title,
-                published_date=published_date,
-                introduction=introduction,
-                main_content=main_content,
-                conclusion=conclusion,
-                author=request.user.username
-            )
+            return self.post_dispatcher(request, "standard_blog_post")
 
         return render(request, "standard-blog-post.html", context)
+    
+    def post_dispatcher(self, request, form_type):
+        handlers = {
+            'standard_blog_post': StandardBlogPostHandler
+        }
+
+        handler_class = handlers.get(form_type)
+        if not handler_class:
+            # return render(request, "error.html", {"message": "Unknown form type"})
+            return HttpResponse("Unknown form type", status=400)
+
+        handler = handler_class(request)
+        return handler.handle()
 
     def say_hello(self, request):
         return render(request, 'hello.html', {'name': 'Vince'})
