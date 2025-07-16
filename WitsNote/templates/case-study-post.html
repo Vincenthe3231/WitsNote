@@ -16,7 +16,7 @@
 <body id="top">
 
     <main class="container my-5">
-        <form method="post" action="{% url 'post_dispatcher' form_type='standard_blog_post' %}">
+        <form method="post" action="{% url 'post_dispatcher' form_type='case_study_blog_post' %}">
             <!-- <input type="hidden" name="form_type" value="standard"> -->
             {% csrf_token %}
 
@@ -73,6 +73,7 @@
     </main>
     {% include 'format/footer.html' %}
     {% include 'quick-load/load-js.html' %}
+    <script src="{% static 'js/post-customization/case-study-blog-post.js' %}"></script>
 </body>
 
 </html>

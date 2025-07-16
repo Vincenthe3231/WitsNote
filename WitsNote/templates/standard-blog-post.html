@@ -10,18 +10,11 @@
     <link rel="stylesheet" href="{% static 'css/blog-post-alignment.css' %}">
     {% include 'quick-load/load-style.html' %}
 </head>
-<header class="site-header d-flex flex-column justify-content-center align-items-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-12 text-center">
-                <h2 class="mb-0">Choose a Post Template</h2>
-            </div>
-        </div>
-    </div>
-</header>
+
 
 <body id="top">
     {% include 'format/navbar.html' %}
+    {% include "format/header.html" %}
     <main class="container my-5">
         <form method="post" action="{% url 'post_dispatcher' form_type='standard_blog_post' %}">
             <!-- <input type="hidden" name="form_type" value="standard"> -->
@@ -88,6 +81,7 @@
             GEMINI_API_URL: "{{ gemini_api_url }}"
         };
     </script>
+    <script src="{% static 'js/post-customization/standard-blog-post.js' %}"></script>
 </body>
 
 </html>

@@ -2,8 +2,11 @@ from django.shortcuts import render
 from .models import Post
 from django.http import HttpResponse, HttpRequest
 from django.conf import settings
-from WitsNote.template.handlers.standard_blog_post import StandardBlogPostHandler
-from WitsNote.template.handlers.case_study_post import CaseStudyPostHandler
+# from .template.handlers.standard_blog_post import StandardBlogPostHandler
+# from .template.handlers.case_study_post import CaseStudyPostHandler
+# from .template.handlers.listicle_post_handler import ListiclePostHandler
+from .template.handlers import *
+
 # from django.contrib.auth.models import User, auth
 
 # Create your views here.
@@ -68,12 +71,22 @@ class WitsNoteView:
         else:
             self.__set_author(request)
             return render(request, "listicle-post.html", self.context)
+        
+    # Handle the infographic post creation
+    def create_infograhic_post(self, request):
+        if request.method == "POST":
+            return self.post_dispatcher(request, "infographic_post")
+        else:
+            self.__set_author(request)
+            return render(request, "infographic-post.html", self.context)
 
     # Dispatch the HttpRequest to the corresponding form handler
     def post_dispatcher(self, request, form_type):
         handlers = {
             'standard_blog_post': StandardBlogPostHandler,
             'case_study_post': CaseStudyPostHandler,
+            'listicle_post': ListiclePostHandler,
+            'infographic_post': InfographicPostHandler
         }
 
         handler_class = handlers.get(form_type)

@@ -1,11 +1,31 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infographic Post</title>
+    <link rel="stylesheet" href="{% static 'css/blog-post-alignment.css' %}">
+    {% include 'quick-load/load-style.html' %}
 </head>
+
 <body>
-    
+    <main>
+        {% include 'format/navbar.html' %}
+        {% include 'format/header.html' %}
+
+    </main>
+    {% include 'format/footer.html' %}
+    {% include 'quick-load/load-js.html' %}
+    <script>
+        window.AppConfig = {
+            GEMINI_API_KEY: "{{ gemini_api_key }}",
+            GEMINI_API_URL: "{{ gemini_api_url }}"
+        };
+    </script>
+    <script src="{% static 'js/post-customization/infographic-blog-post.js' %}"></script>
 </body>
+
 </html>
