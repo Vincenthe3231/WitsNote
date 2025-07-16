@@ -1,13 +1,26 @@
 from django.shortcuts import render
 from .models import Post
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.conf import settings
 from WitsNote.template.handlers.standard_blog_post import StandardBlogPostHandler
+from WitsNote.template.handlers.case_study_post import CaseStudyPostHandler
 # from django.contrib.auth.models import User, auth
 
 # Create your views here.
 
 class WitsNoteView:
+    def __init__(self):
+       self.context = {
+            'gemini_api_key': settings.GEMINI_API_KEY,
+            'gemini_api_url': settings.GEMINI_API_URL,
+            'author': None,
+            
+        } 
+
+    def __set_author(self, request):
+        self.context['author'] = request.user.username  
+        
+
     def index(self, request):
         posts = Post.objects.all().order_by('-created_at')
         return render(request, "index.html", {'posts': posts})
@@ -27,23 +40,40 @@ class WitsNoteView:
 
     def post_detail(self, request, post_id):
         post = Post.objects.get(id=post_id)
+        self.__set_author(request)
         return render(request, "post-detail.html", {'post': post})
 
+    ''' ---  Handle All the Post Creation --- '''
+    
+    # Handle the case study post creation
+    def create_case_study_post(self, request):
+        if request.method == "POST":
+            return self.post_dispatcher(request, 'case_study_post')
+        else:
+            self.__set_author(request)
+            return render(request, "case-study-post.html", self.context)
+
+    # Handle the standard blog post creation
     def create_standard_blog_post(self, request):
-        context = {
-            'gemini_api_key': settings.GEMINI_API_KEY,
-            'gemini_api_url': settings.GEMINI_API_URL,
-            'author': request.user.username
-        }
-        
         if request.method == "POST":
             return self.post_dispatcher(request, "standard_blog_post")
+        else:
+            self.__set_author(request)
+            return render(request, "standard-blog-post.html", self.context)
+        
+    # Handle the listicle post creation
+    def create_listicle_post(self, request):
+        if request.method == "POST":
+            return self.post_dispatcher(request, "listicle_post")
+        else:
+            self.__set_author(request)
+            return render(request, "listicle-post.html", self.context)
 
-        return render(request, "standard-blog-post.html", context)
-    
+    # Dispatch the HttpRequest to the corresponding form handler
     def post_dispatcher(self, request, form_type):
         handlers = {
-            'standard_blog_post': StandardBlogPostHandler
+            'standard_blog_post': StandardBlogPostHandler,
+            'case_study_post': CaseStudyPostHandler,
         }
 
         handler_class = handlers.get(form_type)
@@ -53,6 +83,8 @@ class WitsNoteView:
 
         handler = handler_class(request)
         return handler.handle()
+
+    ''' --- Demonstration from YouTube Video --- '''
 
     def say_hello(self, request):
         return render(request, 'hello.html', {'name': 'Vince'})

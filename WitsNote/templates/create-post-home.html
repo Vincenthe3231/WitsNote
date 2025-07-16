@@ -8,22 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
 
-    {% include 'load-style.html' %}
+    {% include 'quick-load/load-style.html' %}
 </head>
 
 <body id="top">
-    {% include 'navbar.html' %}
+    {% include 'format/navbar.html' %}
+    {% include 'format/header.html' %}
     <main>
-        <header class="site-header d-flex flex-column justify-content-center align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 col-12 text-center">
-                        <h2 class="mb-0">Choose a Post Template</h2>
-                    </div>
-                </div>
-            </div>
-        </header>
-
         <section class="section-padding">
             <div class="container">
                 <div class="row justify-content-center">
@@ -45,11 +36,11 @@
 
                             <div class="col-lg-6 col-md-6 col-12 mb-4">
                                 <div class="custom-block bg-white shadow-lg">
-                                    <a href="#" class="d-flex flex-column text-center p-4">
+                                    <a href="{% url 'case_study_blog_post' %}" class="d-flex flex-column text-center p-4">
                                         <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
                                             <i class="bi-chat-dots"></i>
                                         </div>
-                                        <h5 class="mb-2">Q&A Format</h5>
+                                        <h5 class="mb-2">Case Study Blog Post</h5>
                                         <p class="text-muted">Ideal for answering specific questions from your audience.</p>
                                         <span class="btn custom-btn mt-3">Use Template</span>
                                     </a>
@@ -58,7 +49,7 @@
 
                             <div class="col-lg-6 col-md-6 col-12 mb-4">
                                 <div class="custom-block bg-white shadow-lg">
-                                    <a href="#" class="d-flex flex-column text-center p-4">
+                                    <a href="{% url 'create_listicle_post' %}" class="d-flex flex-column text-center p-4">
                                         <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
                                             <i class="bi-list-ol"></i>
                                         </div>
@@ -87,9 +78,9 @@
             </div>
         </section>
     </main>
-    {% include 'footer.html' %}
+    {% include 'format/footer.html' %}
     <!-- JAVASCRIPT FILES -->
-    {% include 'load-js.html' %}
+    {% include 'quick-load/load-js.html' %}
 
 </body>
 

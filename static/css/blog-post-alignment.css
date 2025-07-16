@@ -11,8 +11,11 @@
 }
 
 body#top{
-    background-color: #80d0c7;
+    /* background-color: #17587d; */
+    background-image: linear-gradient(to bottom right, #17587d, #80d0c7);
 }
+
+
 
 /* Custom styles for centering the main content and aligning header elements
         body {
@@ -33,6 +36,9 @@ body#top{
     /* Ensure it's responsive */
     padding: 40px 15px;
     /* Add some padding on smaller screens */
+    background-color: white;
+    box-shadow:  30px 30px 1px rgba(255, 255, 255, 0.8);
+    border: 3px solid whitesmoke;
 }
 
 .header-meta {
@@ -58,7 +64,7 @@ body#top{
 textarea.form-control-plaintext {
     resize: none;
     overflow: hidden;
-    min-height: 80px;
+    min-height: 20px;
     max-height: none;
     /* Minimum height for the textarea */
     line-height: 1.6;
@@ -68,3 +74,23 @@ textarea.form-control-plaintext {
     text-align: justify;
     text-indent: 2em;
 }
+
+.custom-title-input{
+    text-shadow: 1px 2px 1px black;
+}
+
+.custom-title-input:active{
+    text-shadow: none;
+}
+
+#blogPostTitle{
+    text-indent: 0em;
+}
+
+footer{
+    background-color: white;
+}
+
+/* .mb-4 h2{
+    color: rgba(0, 0, 0, 0.8);
+} */

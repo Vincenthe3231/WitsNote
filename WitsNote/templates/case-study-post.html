@@ -6,22 +6,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Standard Blog Post</title>
-    <link rel="stylesheet" href="{% static 'css/blog-post-alignment.css' %}">
+    <title>Case Study Post</title>
     {% include 'quick-load/load-style.html' %}
+    <link rel="stylesheet" href="{% static 'css/blog-post-alignment.css' %}">
 </head>
-<header class="site-header d-flex flex-column justify-content-center align-items-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-12 text-center">
-                <h2 class="mb-0">Choose a Post Template</h2>
-            </div>
-        </div>
-    </div>
-</header>
+{% include 'format/navbar.html' %}
+{% include 'format/header.html' %}
 
 <body id="top">
-    {% include 'format/navbar.html' %}
+
     <main class="container my-5">
         <form method="post" action="{% url 'post_dispatcher' form_type='standard_blog_post' %}">
             <!-- <input type="hidden" name="form_type" value="standard"> -->
@@ -33,14 +26,14 @@
                 <h2 class="fw-normal">Introduction</h2><i class="bi bi-plus"></i>
                 <textarea name="introduction" id="introductionText" class="form-control-plaintext" rows="4" required
                     placeholder="This is the introduction to the blog post. It sets the stage for what the reader can expect and introduces the main topic."></textarea>
-                <button id="introSummaryBtn" class="btn btn-primary mt-2">✨ Summarize Introduction</button>
+                <!-- <button id="introSummaryBtn" class="btn btn-primary mt-2">✨ Summarize Introduction</button>
                 <div id="introSummaryOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Summary:</strong> <span id="introSummaryText"></span>
                     <div id="introSummaryLoading" class="spinner-border spinner-border-sm text-primary" role="status"
                         style="display: none;">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                </div>
+                </div> -->
                 <div class="imageContainer"></div>
             </section>
 
@@ -48,14 +41,14 @@
                 <h2 class="fw-normal">Main Content</h2>
                 <textarea name="main_content" id="mainContentText" class="form-control-plaintext" rows="8" required
                     placeholder="This is the main content of the blog post. It should be detailed and provide all the necessary information, arguments, or stories. For example, if this blog post is about the benefits of remote work, this section would discuss increased flexibility, reduced commute times, access to a global talent pool, and potential cost savings for businesses. It might also touch upon challenges like maintaining team cohesion or ensuring productivity, and how to overcome them. The content here should be substantial enough for summarization and for generating a meaningful conclusion."></textarea>
-                <button id="summarizeBtn" class="btn btn-primary mt-2">✨ Summarize Main Content</button>
+                <!-- <button id="summarizeBtn" class="btn btn-primary mt-2">✨ Summarize Main Content</button>
                 <div id="summaryOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Summary:</strong> <span id="summaryText"></span>
                     <div id="summaryLoading" class="spinner-border spinner-border-sm text-primary" role="status"
                         style="display: none;">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                </div>
+                </div> -->
                 <div class="imageContainer"></div>
             </section>
 
@@ -63,14 +56,14 @@
                 <h2 class="fw-normal">Conclusion</h2>
                 <textarea name="conclusion" id="conclusionText" class="form-control-plaintext" rows="4" required
                     placeholder="This is the conclusion of the blog post. It should summarize the key points and offer a final thought or call to action. (Click 'Generate Conclusion' to get a new one!)"></textarea>
-                <button id="generateConclusionBtn" class="btn btn-primary mt-2">✨ Generate Conclusion</button>
+                <!-- <button id="generateConclusionBtn" class="btn btn-primary mt-2">✨ Generate Conclusion</button>
                 <div id="conclusionOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Generated Conclusion:</strong> <span id="generatedConclusionText"></span>
                     <div id="conclusionLoading" class="spinner-border spinner-border-sm text-primary" role="status"
                         style="display: none;">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                </div>
+                </div> -->
             </section>
             </section>
             <div class="d-flex justify-content-end mt-4">
@@ -78,16 +71,8 @@
             </div>
         </form>
     </main>
-    </form>
-    </main>
     {% include 'format/footer.html' %}
     {% include 'quick-load/load-js.html' %}
-    <script>
-        window.AppConfig = {
-            GEMINI_API_KEY: "{{ gemini_api_key }}",
-            GEMINI_API_URL: "{{ gemini_api_url }}"
-        };
-    </script>
 </body>
 
 </html>

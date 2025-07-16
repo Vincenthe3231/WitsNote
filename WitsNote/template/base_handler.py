@@ -6,13 +6,13 @@ class BasePostHandler(ABC):
         self.request = request
 
     def handle(self) -> HttpResponse:   # "-> HttpResponse" is a type hint indicating the method is expected to return an HttpResponse
-        # if self.request.method != "POST":
-        #     return HttpResponse(status=405)
+        if self.request.method != "POST":
+            return HttpResponse(status=405)
         
         return self.process_post()
         
-    # def invalid_method(self) -> HttpResponse:
-    #     return HttpResponse("Invalid request method", status=405)
+    def invalid_method(self) -> HttpResponse:
+        return HttpResponse("Invalid request method", status=405)
     
     @abstractmethod
     def process_post(self) -> HttpResponse:
