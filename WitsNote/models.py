@@ -33,3 +33,9 @@ class Post(models.Model):
 
     class Meta:
         db_table = 'witsnote_post'
+        
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='post_images/')
+    section = models.CharField(max_length=50)   # introduction, main content, conclusion
+    uploaded_at = models.DateTimeField(auto_now_add=True)

@@ -17,4 +17,5 @@ const options = {
 };
 
 const localTimeWithOptions = now.toLocaleTimeString(undefined, options);
-publishedDate.textContent = `Published on: ${localTimeWithOptions}`;
+publishedDate.textContent = `Time Now: ${localTimeWithOptions}`;
+publishedDate.style.wordSpacing = "5px";

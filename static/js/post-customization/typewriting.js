@@ -1,51 +1,36 @@
-// Get the introduction textarea element
-const introductionTextarea = document.getElementById('introductionText');
-const blogPostTitle = document.getElementById('blogPostTitle');
-// const textareas = document.querySelectorAll('textarea.form-control-plaintext');
-
-// Function to auto-resize textarea
-function autoExpandTextarea(element) {
-    element.style.height = 'auto'; // Reset height to recalculate
-    element.style.height = (element.scrollHeight) + 'px'; // Set height to scrollHeight
-}
-
-// Add event listener for input to auto-expand
-if (introductionTextarea) {
-    introductionTextarea.addEventListener('input', () => autoExpandTextarea(introductionTextarea));
-    // Also call it once on load in case there's pre-filled content
-    window.addEventListener('load', () => autoExpandTextarea(introductionTextarea));
-}
-
-// Add event listener for input to auto-expand
-if (blogPostTitle) {
-    blogPostTitle.addEventListener('input', () => autoExpandTextarea(blogPostTitle));
-    // Also call it once on load in case there's pre-filled content
-    window.addEventListener('load', () => autoExpandTextarea(blogPostTitle));
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Select all textareas you want to apply this to
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all textareas with the blog post class
     const textareas = document.querySelectorAll('textarea.form-control-plaintext');
 
+    // Function to auto-resize a textarea
+    function autoExpandTextarea(textarea) {
+        textarea.style.height = 'auto'; // Reset
+        textarea.style.height = textarea.scrollHeight + 'px'; // Adjust
+    }
+
+    // Attach handlers to each textarea
     textareas.forEach(textarea => {
-        textarea.addEventListener('keydown', function(e) {
-            // Check if the pressed key is the Tab key (keyCode 9 or key 'Tab')
+        // Auto-expand on input
+        textarea.addEventListener('input', () => autoExpandTextarea(textarea));
+
+        // Auto-expand immediately in case of prefilled content
+        autoExpandTextarea(textarea);
+
+        // Enable tab indentation
+        textarea.addEventListener('keydown', function (e) {
             if (e.key === 'Tab' || e.keyCode === 9) {
-                e.preventDefault(); // Prevent the default tab behavior (moving focus)
+                e.preventDefault();
 
                 const start = this.selectionStart;
                 const end = this.selectionEnd;
-                const value = this.value;
+                const indent = '        '; // 8 spaces
 
-                // Determine the indentation string (e.g., 4 spaces or a tab character)
-                // You can change this to '    ' (4 spaces) if you prefer spaces over actual tab characters
-                const indent = '        '; // Using 4 spaces for indentation
-
-                // Insert the indentation string at the current cursor position or selection
-                this.value = value.substring(0, start) + indent + value.substring(end);
-
-                // Move the cursor to the end of the inserted indentation
+                // Insert indentation
+                this.value = this.value.substring(0, start) + indent + this.value.substring(end);
                 this.selectionStart = this.selectionEnd = start + indent.length;
+
+                // Expand after inserting
+                autoExpandTextarea(this);
             }
         });
     });

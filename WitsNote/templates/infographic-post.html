@@ -26,6 +26,24 @@
         };
     </script>
     <script src="{% static 'js/post-customization/infographic-blog-post.js' %}"></script>
+
+    <!-- Fullscreen Image Preview Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <!-- Preview Image with smooth zoom animation -->
+                    <img id="modalPreviewImage" src="" alt="Preview" class="img-fluid"
+                        style="max-height: 90vh; transition: transform 0.3s ease; cursor: zoom-in;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

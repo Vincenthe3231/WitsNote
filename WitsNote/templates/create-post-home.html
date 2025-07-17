@@ -81,6 +81,13 @@
     {% include 'format/footer.html' %}
     <!-- JAVASCRIPT FILES -->
     {% include 'quick-load/load-js.html' %}
+    <script>
+        element = document.getElementById("typewriter");
+        element.classList.remove("h5");
+        element.classList.add("h2");
+        element.classList.add("fw-bold");
+        element.innerHTML = "Choose your template";
+    </script>
 
 </body>
 

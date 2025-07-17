@@ -15,14 +15,18 @@
     {% include 'format/navbar.html' %}
     {% include 'format/header.html' %}
     <main class="container my-5">
-        <form method="post" action="{% url 'post_dispatcher' form_type='listicle_blog_post' %}">
+        <form method="post" action="{% url 'post_dispatcher' form_type='listicle_blog_post' %}" enctype="multipart/form-data">
             <!-- <input type="hidden" name="form_type" value="standard"> -->
             {% csrf_token %}
 
             {% include 'format/masthead.html' %}
 
-            <section class="mb-4">
-                <h2 class="fw-normal">Introduction</h2><i class="bi bi-plus"></i>
+            <section class="mb-4" data-section="introduction">
+                <h2 class="fw-normal">Introduction</h2>
+                <i class="bi bi-plus" data-input-id="introImageInput" style="cursor:pointer;" title="Add Image"></i>
+                <input type="file" name="intro_images" id="introImageInput" accept="image/*" style="display:none;" multiple>
+                <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
+
                 <textarea name="introduction" id="introductionText" class="form-control-plaintext" rows="4" required
                     placeholder="This is the introduction to the blog post. It sets the stage for what the reader can expect and introduces the main topic."></textarea>
                 <button id="introSummaryBtn" class="btn btn-primary mt-2">✨ Summarize Introduction</button>
@@ -36,8 +40,11 @@
                 <div class="imageContainer"></div>
             </section>
 
-            <section class="mb-4">
+            <section class="mb-4" data-section="main_content">
                 <h2 class="fw-normal">Main Content</h2>
+                <i class="bi bi-plus" data-input-id="mainImageInput" style="cursor:pointer;" title="Add Image"></i>
+                <input type="file" name="main_images" id="mainImageInput" accept="image/*" style="display:none;" multiple>
+                <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
                 <textarea name="main_content" id="mainContentText" class="form-control-plaintext" rows="8" required
                     placeholder="This is the main content of the blog post. It should be detailed and provide all the necessary information, arguments, or stories. For example, if this blog post is about the benefits of remote work, this section would discuss increased flexibility, reduced commute times, access to a global talent pool, and potential cost savings for businesses. It might also touch upon challenges like maintaining team cohesion or ensuring productivity, and how to overcome them. The content here should be substantial enough for summarization and for generating a meaningful conclusion."></textarea>
                 <button id="summarizeBtn" class="btn btn-primary mt-2">✨ Summarize Main Content</button>
@@ -51,8 +58,11 @@
                 <div class="imageContainer"></div>
             </section>
 
-            <section class="mb-4">
+            <section class="mb-4" data-section="conclusion">
                 <h2 class="fw-normal">Conclusion</h2>
+                <i class="bi bi-plus" data-input-id="conclusionImageInput" style="cursor:pointer;" title="Add Image"></i>
+                <input type="file" name="conclusion_images" id="conclusionImageInput" accept="image/*" style="display:none;" multiple>
+                <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
                 <textarea name="conclusion" id="conclusionText" class="form-control-plaintext" rows="4" required
                     placeholder="This is the conclusion of the blog post. It should summarize the key points and offer a final thought or call to action. (Click 'Generate Conclusion' to get a new one!)"></textarea>
                 <button id="generateConclusionBtn" class="btn btn-primary mt-2">✨ Generate Conclusion</button>
@@ -81,6 +91,23 @@
         };
     </script>
     <script src="{% static 'js/post-customization/listicle-blog-post.js' %}"></script>
+
+    <!-- Fullscreen Image Preview Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <!-- Preview Image with smooth zoom animation -->
+                    <img id="modalPreviewImage" src="" alt="Preview" class="img-fluid"
+                        style="max-height: 90vh; transition: transform 0.3s ease; cursor: zoom-in;" />
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
