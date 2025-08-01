@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Select all textareas with the blog post class
-    const textareas = document.querySelectorAll('textarea.form-control-plaintext');
+    // Select all textareas with either 'form-control-plaintext' or 'form-control' class
+    const textareas = document.querySelectorAll('textarea.form-control-plaintext, textarea.form-control-subheading, textarea.form-control');
 
     // Function to auto-resize a textarea
     function autoExpandTextarea(textarea) {
-        textarea.style.height = 'auto'; // Reset
-        textarea.style.height = textarea.scrollHeight + 'px'; // Adjust
+        textarea.style.height = 'auto'; // Reset height
+        textarea.style.height = textarea.scrollHeight + 'px'; // Set to scroll height
     }
 
     // Attach handlers to each textarea
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Auto-expand on input
         textarea.addEventListener('input', () => autoExpandTextarea(textarea));
 
-        // Auto-expand immediately in case of prefilled content
+        // Auto-expand immediately on page load in case of prefilled content
         autoExpandTextarea(textarea);
 
         // Enable tab indentation
@@ -25,12 +25,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 const end = this.selectionEnd;
                 const indent = '        '; // 8 spaces
 
-                // Insert indentation
+                // Insert indentation at caret position
                 this.value = this.value.substring(0, start) + indent + this.value.substring(end);
                 this.selectionStart = this.selectionEnd = start + indent.length;
 
-                // Expand after inserting
+                // Adjust height after inserting indent
                 autoExpandTextarea(this);
+            }
+
+            // Handle Enter key: auto-expand after inserting newline
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                // Let the browser insert the newline, then adjust the height shortly after
+                requestAnimationFrame(() => autoExpandTextarea(this));
             }
         });
     });

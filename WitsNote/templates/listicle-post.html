@@ -15,7 +15,8 @@
     {% include 'format/navbar.html' %}
     {% include 'format/header.html' %}
     <main class="container my-5">
-        <form method="post" action="{% url 'post_dispatcher' form_type='listicle_blog_post' %}" enctype="multipart/form-data">
+        <form method="post" action="{% url 'post_dispatcher' form_type='listicle_blog_post' %}"
+            enctype="multipart/form-data">
             <!-- <input type="hidden" name="form_type" value="standard"> -->
             {% csrf_token %}
 
@@ -24,7 +25,8 @@
             <section class="mb-4" data-section="introduction">
                 <h2 class="fw-normal">Introduction</h2>
                 <i class="bi bi-plus" data-input-id="introImageInput" style="cursor:pointer;" title="Add Image"></i>
-                <input type="file" name="intro_images" id="introImageInput" accept="image/*" style="display:none;" multiple>
+                <input type="file" name="intro_images" id="introImageInput" accept="image/*" style="display:none;"
+                    multiple>
                 <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
 
                 <textarea name="introduction" id="introductionText" class="form-control-plaintext" rows="4" required
@@ -42,12 +44,25 @@
 
             <section class="mb-4" data-section="main_content">
                 <h2 class="fw-normal">Main Content</h2>
+
+                <!-- Allowing users to add multiple images -->
                 <i class="bi bi-plus" data-input-id="mainImageInput" style="cursor:pointer;" title="Add Image"></i>
-                <input type="file" name="main_images" id="mainImageInput" accept="image/*" style="display:none;" multiple>
+                <input type="file" name="main_images" id="mainImageInput" accept="image/*" style="display:none;"
+                    multiple>
+                
+                <!-- Container to wrap all the uploaded images -->
                 <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
+
+                <!-- Main Content Textarea -->
                 <textarea name="main_content" id="mainContentText" class="form-control-plaintext" rows="8" required
                     placeholder="This is the main content of the blog post. It should be detailed and provide all the necessary information, arguments, or stories. For example, if this blog post is about the benefits of remote work, this section would discuss increased flexibility, reduced commute times, access to a global talent pool, and potential cost savings for businesses. It might also touch upon challenges like maintaining team cohesion or ensuring productivity, and how to overcome them. The content here should be substantial enough for summarization and for generating a meaningful conclusion."></textarea>
-                <button id="summarizeBtn" class="btn btn-primary mt-2">✨ Summarize Main Content</button>
+
+                <!-- Allowing users to add subheadings -->
+                <i class="bi bi-plus" id="addSubHeadingBtn" style="cursor:pointer;" title="Add Subheading"></i>
+                <div id="subHeadingContainer" class="mt-3 d-flex flex-column gap-2"></div>
+
+                <!-- AI Summarizer -->
+                <!-- <button id="summarizeBtn" class="btn btn-primary mt-2">✨ Summarize Main Content</button>
                 <div id="summaryOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Summary:</strong> <span id="summaryText"></span>
                     <div id="summaryLoading" class="spinner-border spinner-border-sm text-primary" role="status"
@@ -55,13 +70,15 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <div class="imageContainer"></div>
+                <div class="imageContainer"></div> -->
             </section>
 
             <section class="mb-4" data-section="conclusion">
                 <h2 class="fw-normal">Conclusion</h2>
-                <i class="bi bi-plus" data-input-id="conclusionImageInput" style="cursor:pointer;" title="Add Image"></i>
-                <input type="file" name="conclusion_images" id="conclusionImageInput" accept="image/*" style="display:none;" multiple>
+                <i class="bi bi-plus" data-input-id="conclusionImageInput" style="cursor:pointer;"
+                    title="Add Image"></i>
+                <input type="file" name="conclusion_images" id="conclusionImageInput" accept="image/*"
+                    style="display:none;" multiple>
                 <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
                 <textarea name="conclusion" id="conclusionText" class="form-control-plaintext" rows="4" required
                     placeholder="This is the conclusion of the blog post. It should summarize the key points and offer a final thought or call to action. (Click 'Generate Conclusion' to get a new one!)"></textarea>

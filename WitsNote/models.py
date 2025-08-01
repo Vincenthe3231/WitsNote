@@ -39,3 +39,15 @@ class PostImage(models.Model):
     image = models.ImageField(upload_to='post_images/')
     section = models.CharField(max_length=50)   # introduction, main content, conclusion
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        queries = []
+        if self.post.id == 1:
+            queries.append(f"Image for {self.post.id}st - {self.section}")
+        elif self.post.id == 2:
+            queries.append(f"Image for {self.post.id}nd - {self.section}")
+        elif self.post.id == 3:
+            queries.append(f"Image for {self.post.id}rd - {self.section}")
+        else:
+            queries.append(f"Image for {self.post.id}th - {self.section}")
+        return ", ".join(queries)

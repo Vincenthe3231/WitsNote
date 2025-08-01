@@ -1,6 +1,7 @@
 from WitsNote.template.base_handler import BasePostHandler
-from WitsNote.models import Post
+from WitsNote.models import Post, PostImage
 from django.shortcuts import render
+from WitsNote.utils import ListOfSections as section
 
 class ListiclePostHandler(BasePostHandler):
     def process_post(self):
@@ -11,7 +12,15 @@ class ListiclePostHandler(BasePostHandler):
             conclusion = self.request.POST.get("conclusion")
             user = self.request.user
             
-            self.__save_post(title, introduction, main_content, conclusion, user)
+            intro_image = self.request.FILES.getlist("intro_images")
+            main_image = self.request.FILES.getlist("main_images")
+            conclusion_image = self.request.FILES.getlist("conclusion_images")
+            
+            post = self.__save_post(title, introduction, main_content, conclusion, user)
+            self.__save_images(post, intro_image, section.INTRO)
+            self.__save_images(post, main_image, section.MC)
+            self.__save_images(post, conclusion_image, section.CONC)
+            
             return render(self.request, "create-post-home.html")
         
         else:
@@ -27,4 +36,11 @@ class ListiclePostHandler(BasePostHandler):
             user=user
         )
         
-        return post.save()
+        return post
+    
+    def __save_images(self, post, images, section):
+        post_image = PostImage.objects.create(
+            post=post,
+            image=images,
+            section=section
+        )
