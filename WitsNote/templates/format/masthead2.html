@@ -1,0 +1,64 @@
+<!-- masthead2.html -->
+
+<style>
+    .masthead-container {
+        max-width: 800px;
+        margin: 0 auto 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .custom-title-input {
+        font-size: 2.8rem;
+        font-weight: 800;
+        width: 100%;
+        border: none;
+        outline: none;
+        resize: none;
+        text-align: center;
+        line-height: 1.2;
+        background-color: transparent;
+        color: #1a202c;
+        text-shadow: 1px 2px 1px black;
+        margin-bottom: 1rem;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .custom-title-input::placeholder {
+        color: #6c757d;
+        opacity: 0.7;
+        text-align: center;
+    }
+
+    /* Already exists but you can refine this: */
+    .header-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95rem;
+        color: #6c757d;
+    }
+
+    @media (max-width: 576px) {
+    .header-meta {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+</style>
+
+<div class="masthead-container">
+    <textarea name="title" id="blogPostTitle" class="custom-title-input" placeholder="Blog Post Title" required autofocus></textarea>
+
+    <div class="header-meta-row">
+        <div class="header-meta">
+            <div class="author-info">
+                <span>Author: {{ author }}</span>
+            </div>
+            <span class="text-muted published-date" id="publishedDate"></span>
+        </div>
+    </div>
+</div>
+<hr>

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Select all textareas with either 'form-control-plaintext' or 'form-control' class
-    const textareas = document.querySelectorAll('textarea.form-control-plaintext, textarea.form-control-subheading, textarea.form-control');
+    const textareas = document.querySelectorAll('textarea.form-control-plaintext, textarea.form-control-subheading, textarea.form-control, textarea.custom-title-input');
 
     // Function to auto-resize a textarea
     function autoExpandTextarea(textarea) {

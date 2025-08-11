@@ -1,0 +1,9 @@
+{% if post.post_type == 'Standard' %}
+    {% include 'posts/standard.html' %}
+{% elif post.post_type == 'Case Study' %}
+    {% include 'posts/case_study.html' %}
+{% elif post.post_type == 'Listicle' %}
+    {% include 'posts/listicle.html' %}
+{% elif post.post_type == 'Infographic' %}
+    {% include 'posts/infographic.html' %}
+{% endif %}

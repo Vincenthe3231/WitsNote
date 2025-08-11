@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/blog-post-alignment.css' %}">
+    {% include '../quick-load/load-style.html' %}
+</head>
+<body id="top">
+    {% include '../format/navbar.html' %}
+    <main class="container my-5">
+        <div class="post-content">
+            {{ post.content }}
+        </div>
+    </main>
+
+    {% include '../format/footer.html' %}
+    {% include '../quick-load/load-js.html' %}
+</body>
+</html>

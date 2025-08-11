@@ -23,25 +23,32 @@
                             <div class="col-lg-6 col-md-6 col-12 mb-4">
                                 <div class="custom-block bg-white shadow-lg">
                                     <a href="{% url 'standard_blog_post' %}" class="d-flex flex-column text-center p-4">
-                                    {% comment %}<a href="{% url 'post_dispatcher' form_type='standard_blog_post' %}" class="d-flex flex-column text-center p-4">{% endcomment %}
-                                        <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
-                                            <i class="bi-pencil"></i>
-                                        </div>
-                                        <h5 class="mb-2">Standard Blog Post</h5>
-                                        <p class="text-muted">A classic template for general articles and discussions.</p>
-                                        <span class="btn custom-btn mt-3">Use Template</span>
-                                    </a>
+                                        {% comment %}<a
+                                            href="{% url 'post_dispatcher' form_type='standard_blog_post' %}"
+                                            class="d-flex flex-column text-center p-4">{% endcomment %}
+                                            <div
+                                                class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
+                                                <i class="bi-pencil"></i>
+                                            </div>
+                                            <h5 class="mb-2">Standard Blog Post</h5>
+                                            <p class="text-muted">A classic template for general articles and
+                                                discussions.</p>
+                                            <span class="btn custom-btn mt-3">Use Template</span>
+                                        </a>
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-12 mb-4">
                                 <div class="custom-block bg-white shadow-lg">
-                                    <a href="{% url 'case_study_blog_post' %}" class="d-flex flex-column text-center p-4">
-                                        <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
+                                    <a href="{% url 'case_study_blog_post' %}"
+                                        class="d-flex flex-column text-center p-4">
+                                        <div
+                                            class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
                                             <i class="bi-chat-dots"></i>
                                         </div>
                                         <h5 class="mb-2">Case Study Blog Post</h5>
-                                        <p class="text-muted">Ideal for answering specific questions from your audience.</p>
+                                        <p class="text-muted">Ideal for answering specific questions from your audience.
+                                        </p>
                                         <span class="btn custom-btn mt-3">Use Template</span>
                                     </a>
                                 </div>
@@ -50,7 +57,8 @@
                             <div class="col-lg-6 col-md-6 col-12 mb-4">
                                 <div class="custom-block bg-white shadow-lg">
                                     <a href="{% url 'listicle_blog_post' %}" class="d-flex flex-column text-center p-4">
-                                        <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
+                                        <div
+                                            class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
                                             <i class="bi-list-ol"></i>
                                         </div>
                                         <h5 class="mb-2">Listicle Post</h5>
@@ -62,8 +70,10 @@
 
                             <div class="col-lg-6 col-md-6 col-12 mb-4">
                                 <div class="custom-block bg-white shadow-lg">
-                                    <a href="{% url 'infographic_blog_post' %}" class="d-flex flex-column text-center p-4">
-                                        <div class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
+                                    <a href="{% url 'infographic_blog_post' %}"
+                                        class="d-flex flex-column text-center p-4">
+                                        <div
+                                            class="custom-block-icon-wrap d-flex align-items-center justify-content-center mx-auto mb-3">
                                             <i class="bi-image"></i>
                                         </div>
                                         <h5 class="mb-2">Infographic Post</h5>
@@ -82,11 +92,31 @@
     <!-- JAVASCRIPT FILES -->
     {% include 'quick-load/load-js.html' %}
     <script>
-        element = document.getElementById("typewriter");
-        element.classList.remove("h5");
-        element.classList.add("h2");
-        element.classList.add("fw-bold");
-        element.innerHTML = "Choose your template";
+        document.addEventListener("DOMContentLoaded", function () {
+            const element = document.getElementById("typewriter");
+            if (element) {
+                element.classList.remove("h5");
+                element.classList.add("h2");
+                element.classList.add("fw-bold");
+                const text = "Variety templates for your choices. Not adequate? <br> Let us know";
+                let i = 0;
+                function typewriter() {
+                    if (i < text.length) {
+                        // Handle HTML tags in the string
+                        if (text.substring(i, i + 4) === "<br>") {
+                            element.innerHTML += "<br>";
+                            i += 4;
+                        } else {
+                            element.innerHTML += text.charAt(i);
+                            i++;
+                        }
+                        setTimeout(typewriter, 20);
+                    }
+                }
+                element.innerHTML = "";
+                typewriter();
+            }
+        });
     </script>
 
 </body>

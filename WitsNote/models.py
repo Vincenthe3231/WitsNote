@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.utils.crypto import get_random_string
@@ -6,7 +7,14 @@ from django.utils.crypto import get_random_string
 # Create your models here.
 
 class Post(models.Model):
+    POST_TYPE_CHOICES = [
+        ("Standard", "standard"),
+        ("Case Study", "case_study"),
+        ("Listicle", "listicle"),
+        ("Infographic", "infographic"),
+    ]
     title = models.CharField(max_length=200)
+    post_type = models.CharField(max_length=50, choices=POST_TYPE_CHOICES, default="Standard")
     thumbnail = models.ImageField(upload_to='thumbnails/')
     introduction = models.TextField()
     content = models.TextField()
@@ -30,6 +38,9 @@ class Post(models.Model):
     
     def __str__(self):
         return f"{self.title} by {self.author.username}."
+    
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'slug': self.slug})
 
     class Meta:
         db_table = 'witsnote_post'

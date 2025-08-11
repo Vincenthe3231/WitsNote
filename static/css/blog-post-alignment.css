@@ -135,6 +135,23 @@ textarea.form-control-subcontent:focus {
     text-indent: 0em;
 }
 
+#createPostBtn {
+    background: linear-gradient(90deg, #80d0c7, #17587d);
+    /* Purple gradient button */
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 12px rgba(111, 66, 193, 0.4);
+}
+
+#createPostBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(111, 66, 193, 0.6);
+    background: linear-gradient(90deg, #17587d, #80d0c7);
+}
+
 footer {
     background-color: white;
 }
@@ -288,10 +305,25 @@ textarea.form-control {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+textarea.form-control.section-textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 120px;
+    /* Default minimum height for textareas */
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    border: 1px solid #ced4da;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .075);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
 textarea.form-control:focus {
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, .25);
+
 }
 
 /* End of Case Study Styles */
@@ -455,7 +487,24 @@ textarea.form-control:focus {
 }
 
 .add-section-btn {
-    background: linear-gradient(45deg, #6f42c1, #8a2be2);
+    background: linear-gradient(90deg, #80d0c7, #17587d);
+    /* Purple gradient button */
+    /* border: none; */
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 12px rgba(111, 66, 193, 0.4);
+     /* Required for border-image to work */
+    border: 5px solid transparent; 
+    border-image-source: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    border-image-slice: 1;
+    border-image-repeat: stretch; /* Optional, helps with full coverage */
+}
+
+.publish-btn {
+    background: linear-gradient(90deg, #80d0c7, #17587d);
     /* Purple gradient button */
     border: none;
     padding: 0.8rem 2rem;
@@ -469,7 +518,14 @@ textarea.form-control:focus {
 .add-section-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 16px rgba(111, 66, 193, 0.6);
-    background: linear-gradient(45deg, #8a2be2, #6f42c1);
+    background: linear-gradient(90deg, #17587d, #80d0c7);
+    /* Reverse gradient on hover */
+}
+
+.publish-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(111, 66, 193, 0.6);
+    background: linear-gradient(90deg, #17587d, #80d0c7);
     /* Reverse gradient on hover */
 }
 

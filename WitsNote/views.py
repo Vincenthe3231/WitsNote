@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from .models import Post
-from django.http import HttpResponse, HttpRequest
+from django.shortcuts import render, get_object_or_404
+from .models import Post, PostImage
+import requests
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 # from .template.handlers.standard_blog_post import StandardBlogPostHandler
 # from .template.handlers.case_study_post import CaseStudyPostHandler
@@ -21,7 +23,7 @@ class WitsNoteView:
         } 
 
     def __set_author(self, request):
-        self.context['author'] = request.user.username  
+        self.context['author'] = request.user.username
         
 
     def index(self, request):
@@ -32,19 +34,60 @@ class WitsNoteView:
     #     posts = Post.objects.all().order_by('-created_at')
     #     return render(request, 'post-list.html', {'posts': posts})
 
+    @csrf_exempt  # optional if using POST from JavaScript
+    def call_gemini(request):
+        if request.method != "POST":
+            return JsonResponse({'error': 'Only POST allowed'}, status=405)
+
+        try:
+            # Get input from frontend JSON body
+            import json
+            data = json.loads(request.body)
+            prompt = data.get('prompt')
+
+            # Prepare Gemini API request
+            gemini_url = settings.GEMINI_API_URL
+            gemini_key = settings.GEMINI_API_KEY
+
+            response = requests.post(
+                gemini_url,
+                headers={
+                    "Authorization": f"Bearer {gemini_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {
+                        "maxOutputTokens": 256
+                    }
+                }
+            )
+
+            return JsonResponse(response.json(), status=response.status_code)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
     def contact(self, request):
         return render(request, "contact.html")
     
     def topic_listing(self, request):
         return render(request, "topics-listing.html")
     
-    def create_post(self, request):
-        return render(request, "create-post-home.html")
-
-    def post_detail(self, request, post_id):
-        post = Post.objects.get(id=post_id)
+    # Prefetch images efficiently for each blog post listed
+    def blog_post_home(self, request):
+        posts = Post.objects.prefetch_related('images').order_by('-created_at')
+        return render(request, "blog-post-home.html", {'posts': posts})
+    
+    # Fetch post with its related images in one go
+    def post_detail(self, request, slug):
+        post = get_object_or_404(Post.objects.prefetch_related('images'), slug=slug)
         self.__set_author(request)
         return render(request, "post-detail.html", {'post': post})
+    
+    def create_post(self, request):
+        show_feedback_btn = True
+        return render(request, "create-post-home.html", {'show_feedback_btn': show_feedback_btn})
 
     ''' ---  Handle All the Post Creation --- '''
     
@@ -75,7 +118,7 @@ class WitsNoteView:
     # Handle the infographic post creation
     def create_infograhic_post(self, request):
         if request.method == "POST":
-            return self.post_dispatcher(request, "infographic_post")
+            return self.post_dispatcher(request, "infographic_blog_post")
         else:
             self.__set_author(request)
             return render(request, "infographic-post.html", self.context)
@@ -86,7 +129,7 @@ class WitsNoteView:
             'standard_blog_post': StandardBlogPostHandler,
             'case_study_post': CaseStudyPostHandler,
             'listicle_post': ListiclePostHandler,
-            'infographic_post': InfographicPostHandler
+            'infographic_blog_post': InfographicPostHandler
         }
 
         handler_class = handlers.get(form_type)
