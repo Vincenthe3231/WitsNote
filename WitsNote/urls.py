@@ -16,6 +16,8 @@ urlpatterns = [
     path('create-post/infographic-post/', WitsNoteView.create_infograhic_post, name="infographic_blog_post"),
     path('create-post/<str:form_type>/', WitsNoteView.post_dispatcher, name="post_dispatcher"),
     path('api/gemini/', WitsNoteView.call_gemini, name='call_gemini'),
+    path('api/toggle-collection-status/', WitsNoteView.toggle_collection_status, name='toggle_collection_status'),
+    path('api/redirect-to_feedback-form/', WitsNoteView.redirect_to_feedback_form, name='redirect_to_feedback_form'),
     # path('hello/', WitsNoteView.say_hello),
     # path('add/', WitsNoteView.add),
     

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from WitsNote.models import Post
 from phonenumber_field.modelfields import PhoneNumberField
 
 class UserProfile(models.Model):
@@ -12,3 +13,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"[{self.user.id}]-[{self.user.first_name} {self.user.last_name}]"
+
+class PostCollection(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    posts = models.ManyToManyField(Post, related_name="collections")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Collection by {self.user.username} - {self.created_at.strftime('%Y-%m-%d')}"

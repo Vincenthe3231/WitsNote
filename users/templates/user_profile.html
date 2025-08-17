@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #e0f2f7, #c6e2ff); /* Light blue gradient background */
+            background: linear-gradient(to right, #e0f2f7, #c6e2ff);
+            /* Light blue gradient background */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,7 +26,8 @@
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 900px; /* Adjust as needed */
+            max-width: 900px;
+            /* Adjust as needed */
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -43,8 +47,10 @@
 
         .profile-image-wrapper {
             position: relative;
-            width: 120px; /* Adjust based on image size */
-            height: 120px; /* Adjust based on image size */
+            width: 120px;
+            /* Adjust based on image size */
+            height: 120px;
+            /* Adjust based on image size */
             border-radius: 8px;
             overflow: hidden;
             background-color: #f0f0f0;
@@ -96,7 +102,8 @@
         }
 
         .edit-pro-btn {
-            background-color: #007bff; /* Bootstrap primary blue */
+            background-color: #007bff;
+            /* Bootstrap primary blue */
             color: #fff;
             border: none;
             padding: 8px 15px;
@@ -147,7 +154,8 @@
         .tab-button.active::after {
             content: '';
             position: absolute;
-            bottom: -6px; /* Adjust to align with border */
+            bottom: -6px;
+            /* Adjust to align with border */
             left: 0;
             width: 100%;
             height: 2px;
@@ -160,7 +168,8 @@
         }
 
         .left-sidebar {
-            width: 200px; /* Adjust sidebar width */
+            width: 200px;
+            /* Adjust sidebar width */
             margin-right: 40px;
         }
 
@@ -194,7 +203,8 @@
         }
 
         .left-sidebar ul li:not(:last-child) {
-            color: #333; /* For skills that are not links */
+            color: #333;
+            /* For skills that are not links */
             font-size: 15px;
         }
 
@@ -214,7 +224,8 @@
         }
 
         .main-info table tr td:first-child {
-            width: 120px; /* Align labels */
+            width: 120px;
+            /* Align labels */
             color: #333;
             font-weight: 500;
         }
@@ -292,12 +303,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="profile-container">
         <div class="profile-header">
             <div class="profile-image-section">
                 <div class="profile-image-wrapper">
-                    <img src="https://placehold.co/120x120/E0F2F7/007BFF?text=Profile" alt="Profile Picture" class="profile-picture">
+                    <img src="https://placehold.co/120x120/E0F2F7/007BFF?text=Profile" alt="Profile Picture"
+                        class="profile-picture">
                     <button class="change-photo-btn">Change Photo</button>
                 </div>
             </div>
@@ -315,66 +328,106 @@
             </div>
         </div>
 
-        <div class="profile-content">
-            <div class="left-sidebar">
-                <div class="section-title">WORK LINK</div>
-                <ul>
-                    <li><a href="#">Website Link</a></li>
-                    <li><a href="#">Bootsnipp Profile</a></li>
-                    <li><a href="#">Bootply Profile</a></li>
-                </ul>
+        <div class="tab-panel" id="about-tab" style="display: block;">
+            <div class="profile-content">
+                <div class="left-sidebar">
+                    <div class="section-title">WORK LINK</div>
+                    <ul>
+                        <li><a href="#">Website Link</a></li>
+                        <li><a href="#">Bootsnipp Profile</a></li>
+                        <li><a href="#">Bootply Profile</a></li>
+                    </ul>
 
-                <div class="section-title" id="skills">SKILLS</div>
-                <ul>
-                    <li>Web Designer</li>
-                    <li>Web Developer</li>
-                    <li>WordPress</li>
-                    <li>WooCommerce</li>
-                    <li>PHP</li>
-                    <li>.Net</li>
-                    <input type="text" name="skills[]" placeholder="Enter a skill">
-                    <button type="button" onclick="addSkillField()">+ Add Skill</button><br><br>
-                </ul>
-            </div>
+                    <div class="section-title" id="skills">SKILLS</div>
+                    <ul>
+                        <li>Web Designer</li>
+                        <li>Web Developer</li>
+                        <li>WordPress</li>
+                        <li>WooCommerce</li>
+                        <li>PHP</li>
+                        <li>.Net</li>
+                        <input type="text" name="skills[]" placeholder="Enter a skill">
+                        <button type="button" onclick="addSkillField()">+ Add Skill</button><br><br>
+                    </ul>
+                </div>
 
-            
-            <div class="main-info">
-                <table>
-                    <tr>
-                        <td>User Id</td>
-                        <td><a href="#">{{ users.id }}</a></td>
-                    </tr>
-                    <tr>
-                        <td>Name</td>
-                        <td>{{ users.first_name}} {{ users.last_name }}</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td><a href="mailto:{{ users.email }}">{{ users.email }}</a></td>
-                    </tr>
-                    <tr>
-                        <td>Phone</td>
-                        <td>{{ phone_decryption }}</td>
-                    </tr>
-                    <tr>
-                        <td>Profession</td>
-                        <td>{{ profiles.profession }}</td>
-                    </tr>
-                </table>
+                <div class="main-info">
+                    <table>
+                        <tr>
+                            <td>User Id</td>
+                            <td><a href="#">{{ users.id }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{ users.first_name}} {{ users.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td><a href="mailto:{{ users.email }}">{{ users.email }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td>{{ phone_decryption }}</td>
+                        </tr>
+                        <tr>
+                            <td>Profession</td>
+                            <td>{{ profiles.profession }}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            
         </div>
+
     </div>
+    <!-- COLLECTION TAB -->
+    <div class="tab-panel" id="collection-tab" style="display: none; padding: 30px;">
+        <h3>Your Saved Posts</h3>
+        {% if collected_posts %}
+        <ul style="list-style: none; padding: 0;">
+            {% for post in collected_posts %}
+            <li style="margin-bottom: 15px;">
+                <a href="{% url 'post_detail' slug=post.slug %}"
+                    style="font-size: 18px; color: #007bff; text-decoration: none;">
+                    {{ post.title }}
+                </a><br>
+                <span style="font-size: 14px; color: #777;">{{ post.created_at|date:"F d, Y" }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>You haven't added any posts to your collection yet.</p>
+        {% endif %}
+    </div>
+    <script>
+        function addSkillField() {
+            const container = document.getElementById("skills");
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'skills[]';
+            input.placeholder = 'Enter a skill';
+            container.appendChild(document.createElement('br'));
+            container.appendChild(input);
+        }
+
+        // Tab switching logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+
+            tabButtons.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanels.forEach(panel => panel.style.display = 'none');
+
+                    // Add active to clicked tab and show panel
+                    btn.classList.add('active');
+                    tabPanels[index].style.display = 'block';
+                });
+            });
+        });
+    </script>
+
 </body>
-<script>
-function addSkillField() {
-    const container = document.getElementById("skills");
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.name = 'skills[]';
-    input.placeholder = 'Enter a skill';
-    container.appendChild(document.createElement('br'));
-    container.appendChild(input);
-}
-</script>
+
 </html>

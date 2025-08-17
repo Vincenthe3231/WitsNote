@@ -1,13 +1,17 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Post, PostImage
+from users.models import PostCollection as Collection
 import requests
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST, require_http_methods
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
-# from .template.handlers.standard_blog_post import StandardBlogPostHandler
-# from .template.handlers.case_study_post import CaseStudyPostHandler
-# from .template.handlers.listicle_post_handler import ListiclePostHandler
+import json
+from django.urls import reverse
 from .template.handlers import *
+from django.db.models import Q
 
 # from django.contrib.auth.models import User, auth
 
@@ -27,7 +31,11 @@ class WitsNoteView:
         
 
     def index(self, request):
-        posts = Post.objects.all().order_by('-created_at')
+        query = request.GET.get('q')
+        if query:
+            posts = Post.objects.filter(title__icontains=query).order_by('-created_at')
+        else:
+            posts = Post.objects.all().order_by('-created_at')
         return render(request, "index.html", {'posts': posts})
 
     # def post_listing(self, request):
@@ -73,11 +81,37 @@ class WitsNoteView:
     
     def topic_listing(self, request):
         return render(request, "topics-listing.html")
-    
+
     # Prefetch images efficiently for each blog post listed
     def blog_post_home(self, request):
-        posts = Post.objects.prefetch_related('images').order_by('-created_at')
-        return render(request, "blog-post-home.html", {'posts': posts})
+        context = {
+            'posts': None,
+            'show_search_bar': True,
+            'collected_post_ids': [],  # add default
+        }
+
+        query = request.GET.get('q')
+        if query:
+            context['posts'] = Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(introduction__icontains=query) |
+                Q(content__icontains=query) |
+                Q(post_type__icontains=query) |
+                Q(author__username__icontains=query)
+            ).order_by('-created_at')
+        else:
+            context['posts'] = Post.objects.prefetch_related('images').order_by('-created_at')
+
+        # 🔄 Preload collected post IDs if user is authenticated
+        if request.user.is_authenticated:
+            try:
+                collection = Collection.objects.get(user=request.user)
+                context['collected_post_ids'] = list(collection.posts.values_list('id', flat=True))
+            except Collection.DoesNotExist:
+                pass
+
+        return render(request, "blog-post-home.html", context)
+
     
     # Fetch post with its related images in one go
     def post_detail(self, request, slug):
@@ -92,14 +126,16 @@ class WitsNoteView:
     ''' ---  Handle All the Post Creation --- '''
     
     # Handle the case study post creation
+    @method_decorator(require_http_methods(["GET", "POST"]), name='case_study_blog_post')
     def create_case_study_post(self, request):
         if request.method == "POST":
-            return self.post_dispatcher(request, 'case_study_post')
+            return self.post_dispatcher(request, 'case_study_blog_post')
         else:
             self.__set_author(request)
             return render(request, "case-study-post.html", self.context)
 
     # Handle the standard blog post creation
+    @method_decorator(require_http_methods(["GET", "POST"]), name='standard_blog_post')
     def create_standard_blog_post(self, request):
         if request.method == "POST":
             return self.post_dispatcher(request, "standard_blog_post")
@@ -108,6 +144,7 @@ class WitsNoteView:
             return render(request, "standard-blog-post.html", self.context)
         
     # Handle the listicle post creation
+    @method_decorator(require_http_methods(["GET", "POST"]), name='listicle_blog_post')
     def create_listicle_post(self, request):
         if request.method == "POST":
             return self.post_dispatcher(request, "listicle_post")
@@ -116,6 +153,7 @@ class WitsNoteView:
             return render(request, "listicle-post.html", self.context)
         
     # Handle the infographic post creation
+    @method_decorator(require_http_methods(["GET", "POST"]), name='infographic_blog_post')
     def create_infograhic_post(self, request):
         if request.method == "POST":
             return self.post_dispatcher(request, "infographic_blog_post")
@@ -142,14 +180,43 @@ class WitsNoteView:
 
     ''' --- Demonstration from YouTube Video --- '''
 
-    def say_hello(self, request):
-        return render(request, 'hello.html', {'name': 'Vince'})
+    @method_decorator(login_required, name='add_to_collection')
+    @method_decorator(require_POST, name='add_to_collection')
+    # Handle the addition of posts to the user's collection
+    def toggle_collection_status(self, request):
+        try:
+            data = json.loads(request.body)
+            post_id = data.get('post_id')
 
-    def add(self, request):
-        if request.method == "POST":
-            value1 = int(request.POST["num1"])
-            value2 = int(request.POST["num2"])
-            res = value1 + value2
-            return render(request, "result.html", {"result": res})
-        return render(request, "add.html")  # Render form initially
+            post = Post.objects.get(id=post_id)
+            collection, _ = Collection.objects.get_or_create(user=request.user)
+
+            if post in collection.posts.all():
+                collection.posts.remove(post)
+                return JsonResponse({'message': 'Post removed from collection', 'removed': True})
+            else:
+                collection.posts.add(post)
+                return JsonResponse({'message': 'Post added to collection', 'added': True})
+
+        except Post.DoesNotExist:
+            return JsonResponse({'error': 'Post not found'}, status=404)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+        
+    @method_decorator(login_required, name='redirect_to_feedback_form')
+    @method_decorator(require_POST, name='redirect_to_feedback_form')
+    def redirect_to_feedback_form(self, request):
+        try:
+            data = json.loads(request.body)
+
+            # Optional: check for specific keys in the payload
+            if data.get("trigger"):
+                # Return the URL of the feedback form as a JSON response
+                feedback_url = reverse('contact')  # Make sure this URL name exists
+                return JsonResponse({'redirect_url': feedback_url})
+            else:
+                return JsonResponse({'error': 'Invalid request data'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
 

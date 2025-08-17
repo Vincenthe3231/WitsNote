@@ -3,13 +3,66 @@
         <div class="row">
             <div class="col-lg-12 col-12 text-center">
                 <!-- <h2 class="mb-0">Choose a Post Template</h2> -->
-                 <div id="typewriter" class="h5 text-white text-justify lh-lg"></div>
-                 {% if show_feedback_btn %}
-                     <div class="feedback-button">
-                         <button class="btn btn-primary">Give Feedback</button>
-                     </div>
-                 {% endif %}
+                <div id="typewriter" class="h5 text-white text-justify lh-lg"></div>
+
+                {% if show_search_bar %}
+                <div class="input-group input-group-lg my-5">
+                    <form action="{% url 'blog_post_home' %}" method="get" class="d-flex w-100">
+                        <input name="q" type="search" class="form-control" id="keyword" placeholder="Search anything..."
+                            aria-label="Search" value="{{ request.GET.q }}">
+                        <button type="submit"
+                            class="form-control-lg custom-btn custom-btn-bg-white ms-2">Search</button>
+                    </form>
+                </div>
+                {% endif %}
+
+                {% if show_feedback_btn %}
+                <div class="feedback-button">
+                    <button class="btn btn-primary" id="give-feedback-btn">Give Feedback</button>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </header>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const feedbackBtn = document.getElementById("give-feedback-btn");
+
+        if (feedbackBtn) {
+            feedbackBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                fetch("{% url 'redirect_to_feedback_form' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCSRFToken(),
+                    },
+                    body: JSON.stringify({ trigger: true })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.redirect_url) {
+                            window.location.href = data.redirect_url;
+                        } else if (data.error) {
+                            alert("Error: " + data.error);
+                        }
+                    })
+                    .catch(err => console.error("Request failed:", err));
+            });
+        }
+
+        function getCSRFToken() {
+            const name = "csrftoken";
+            const cookies = document.cookie.split(";");
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + "=")) {
+                    return decodeURIComponent(cookie.slice(name.length + 1));
+                }
+            }
+            return "";
+        }
+    });
+</script>
