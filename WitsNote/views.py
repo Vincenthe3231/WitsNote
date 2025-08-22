@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Post, PostImage
+from .models import Post
+import os
 from users.models import PostCollection as Collection
 import requests
 from django.views.decorators.csrf import csrf_exempt
@@ -20,15 +21,15 @@ from django.db.models import Q
 class WitsNoteView:
     def __init__(self):
        self.context = {
-            'gemini_api_key': settings.GEMINI_API_KEY,
-            'gemini_api_url': settings.GEMINI_API_URL,
+            'GEMINI_API_KEY': settings.GEMINI_API_KEY,
+            'GEMINI_API_URL': settings.GEMINI_API_URL,
             'author': None,
             
         } 
 
     def __set_author(self, request):
         self.context['author'] = request.user.username
-        
+
 
     def index(self, request):
         query = request.GET.get('q')
@@ -41,40 +42,119 @@ class WitsNoteView:
     # def post_listing(self, request):
     #     posts = Post.objects.all().order_by('-created_at')
     #     return render(request, 'post-list.html', {'posts': posts})
-
-    @csrf_exempt  # optional if using POST from JavaScript
-    def call_gemini(request):
-        if request.method != "POST":
-            return JsonResponse({'error': 'Only POST allowed'}, status=405)
-
+    
+    @method_decorator(require_POST, name="run_ocr")
+    def run_ocr(self, request):
         try:
-            # Get input from frontend JSON body
-            import json
             data = json.loads(request.body)
-            prompt = data.get('prompt')
+            base64_image = data.get("image")
+            mime_type = data.get("mimeType")
 
-            # Prepare Gemini API request
-            gemini_url = settings.GEMINI_API_URL
-            gemini_key = settings.GEMINI_API_KEY
+            if not base64_image or not mime_type:
+                return JsonResponse({"error": "Image and mimeType required"}, status=400)
 
-            response = requests.post(
-                gemini_url,
-                headers={
-                    "Authorization": f"Bearer {gemini_key}",
-                    "Content-Type": "application/json"
-                },
-                json={
-                    "contents": [{"parts": [{"text": prompt}]}],
-                    "generationConfig": {
-                        "maxOutputTokens": 256
-                    }
-                }
+            # ✅ safe to print AFTER assignment
+            print("Incoming mime:", mime_type)
+            print("Incoming base64 starts with:", base64_image[:50])
+            print("Base64 length:", len(base64_image))
+
+            gemini_url = (
+                "https://generativelanguage.googleapis.com/v1beta/models/"
+                "gemini-2.5-flash-preview-05-20:generateContent"
             )
 
-            return JsonResponse(response.json(), status=response.status_code)
+            payload = {
+                "contents": [
+                    {
+                        "role": "user",
+                        "parts": [
+                            {"text": "Extract all text from the following image and return only the raw text."},
+                            {"inlineData": {"mimeType": mime_type, "data": base64_image}},
+                        ],
+                    }
+                ],
+                "model": "gemini-2.5-flash-preview-05-20",
+            }
+
+            response = requests.post(
+                f"{gemini_url}?key={settings.GEMINI_API_KEY}",
+                headers={"Content-Type": "application/json"},
+                json=payload,
+                timeout=30,
+            )
+
+            # 🔴 Handle non-200 response
+            if response.status_code != 200:
+                try:
+                    error_json = response.json()
+                    error_message = None
+                    if isinstance(error_json, dict) and "error" in error_json:
+                        if isinstance(error_json["error"], dict) and "message" in error_json["error"]:
+                            error_message = error_json["error"]["message"]
+                        else:
+                            error_message = str(error_json["error"])
+                    if not error_message:
+                        error_message = json.dumps(error_json)[:300]
+                except Exception:
+                    error_message = response.text[:300]
+
+                return JsonResponse({"error": error_message}, status=400)
+
+            # ✅ On success
+            data = response.json()
+            text = (
+                data.get("candidates", [{}])[0]
+                .get("content", {})
+                .get("parts", [{}])[0]
+                .get("text", "")
+            )
+
+            return JsonResponse({"text": text}, status=200)
 
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+            return JsonResponse({"error": f"OCR internal error: {str(e)}"}, status=500)
+
+
+
+    @method_decorator(require_POST, name="gemini_proxy")
+    def gemini_proxy(self, request):
+        if request.method == "POST":
+            try:
+                data = json.loads(request.body)
+                prompt = data.get("prompt", "")
+
+                # 🔄 Load dynamically from settings
+                api_key = settings.GEMINI_API_KEY
+                api_url = settings.GEMINI_API_URL
+
+                payload = {
+                    "contents": [
+                        {"role": "user", "parts": [{"text": prompt}]}
+                    ]
+                }
+
+                response = requests.post(
+                    f"{api_url}?key={api_key}",
+                    json=payload,
+                    headers={"Content-Type": "application/json"}
+                )
+                result = response.json()
+
+                if response.status_code == 200 and "candidates" in result:
+                    text = result["candidates"][0]["content"]["parts"][0]["text"]
+                    return JsonResponse({"text": text})
+                else:
+                    print("Gemini Key:", settings.GEMINI_API_KEY)
+                    print("Gemini URL:", settings.GEMINI_API_URL)
+
+                    print("Gemini API Error Response:", result)
+                    return JsonResponse({"error": result}, status=400)
+
+            except Exception as e:
+                return JsonResponse({"error": str(e)}, status=500)
+
+        return JsonResponse({"error": "Invalid request"}, status=405)
+
 
     def contact(self, request):
         return render(request, "contact.html")

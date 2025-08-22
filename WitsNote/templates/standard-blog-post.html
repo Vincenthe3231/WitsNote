@@ -9,8 +9,65 @@
     <title>Standard Blog Post</title>
     <link rel="stylesheet" href="{% static 'css/blog-post-alignment.css' %}">
     {% include 'quick-load/load-style.html' %}
-</head>
+    <style>
+        .ocr-button-container {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+        }
 
+        .ocr-input {
+            margin-right: 10px;
+        }
+
+        /* Loading spinner styling */
+        .spinner-border {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .generated-output {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+
+        /* Simple toast styles */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .toast.success {
+            background-color: #28a745;
+        }
+
+        .toast.error {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
 
 <body id="top">
     {% include 'format/navbar.html' %}
@@ -18,7 +75,6 @@
     <main class="container my-5">
         <form method="post" action="{% url 'post_dispatcher' form_type='standard_blog_post' %}"
             enctype="multipart/form-data">
-            <!-- <input type="hidden" name="form_type" value="standard"> -->
             {% csrf_token %}
 
             {% include 'format/masthead.html' %}
@@ -26,8 +82,22 @@
             <section class="mb-4" data-section="introduction">
                 <h2 class="fw-normal">Introduction</h2>
                 <i class="bi bi-plus" data-input-id="introImageInput" style="cursor:pointer;" title="Add Image"></i>
-                <input type="file" name="intro_images" id="introImageInput" accept="image/*" style="display:none;" multiple>
+                <input type="file" name="intro_images" id="introImageInput" accept="image/*" style="display:none;"
+                    multiple>
                 <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
+
+                <div class="ocr-button-container">
+                    <button type="button" id="introOcrBtn" class="btn btn-primary">
+                        <i class="fas fa-magic me-2"></i>Extract Text from Uploaded Images
+                    </button>
+                    <div id="introOcrLoading" class="spinner-border text-primary" role="status" style="display:none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <div id="introOcrOutput" class="mt-3 generated-output" style="display: none;">
+                    <strong>Extracted Text:</strong> <span id="introOcrText"></span>
+                </div>
 
                 <textarea name="introduction" id="introductionText" class="form-control-plaintext" rows="4" required
                     placeholder="This is the introduction to the blog post. It sets the stage for what the reader can expect and introduces the main topic."></textarea>
@@ -45,11 +115,23 @@
             <section class="mb-4" data-section="main_content">
                 <h2 class="fw-normal">Main Content</h2>
                 <i class="bi bi-plus" data-input-id="mainImageInput" style="cursor:pointer;" title="Add Image"></i>
-                <input type="file" name="main_images" id="mainImageInput" accept="image/*" style="display:none;" multiple>
+                <input type="file" name="main_images" id="mainImageInput" accept="image/*" style="display:none;"
+                    multiple>
                 <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
+                <div class="ocr-button-container">
+                    <button type="button" id="mainOcrBtn" class="btn btn-primary">
+                        <i class="fas fa-magic me-2"></i>Extract Text from Uploaded Images
+                    </button>
+                    <div id="mainOcrLoading" class="spinner-border text-primary" role="status" style="display:none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div id="mainOcrOutput" class="mt-3 generated-output" style="display: none;">
+                    <strong>Extracted Text:</strong> <span id="mainOcrText"></span>
+                </div>
                 <textarea name="main_content" id="mainContentText" class="form-control-plaintext" rows="8" required
                     placeholder="This is the main content of the blog post. It should be detailed and provide all the necessary information, arguments, or stories. For example, if this blog post is about the benefits of remote work, this section would discuss increased flexibility, reduced commute times, access to a global talent pool, and potential cost savings for businesses. It might also touch upon challenges like maintaining team cohesion or ensuring productivity, and how to overcome them. The content here should be substantial enough for summarization and for generating a meaningful conclusion."></textarea>
-                <button id="summarizeBtn" class="btn btn-primary mt-2">✨ Summarize Main Content</button>
+                <button id="summarizeBtn" type="button" class="btn btn-primary mt-2">✨ Summarize Main Content</button>
                 <div id="summaryOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Summary:</strong> <span id="summaryText"></span>
                     <div id="summaryLoading" class="spinner-border spinner-border-sm text-primary" role="status"
@@ -62,12 +144,26 @@
 
             <section class="mb-4" data-section="conclusion">
                 <h2 class="fw-normal">Conclusion</h2>
-                <i class="bi bi-plus" data-input-id="conclusionImageInput" style="cursor:pointer;" title="Add Image"></i>
-                <input type="file" name="conclusion_images" id="conclusionImageInput" accept="image/*" style="display:none;" multiple>
+                <i class="bi bi-plus" data-input-id="conclusionImageInput" style="cursor:pointer;"
+                    title="Add Image"></i>
+                <input type="file" name="conclusion_images" id="conclusionImageInput" accept="image/*"
+                    style="display:none;" multiple>
                 <div class="imageContainer mt-2 d-flex flex-wrap gap-2"></div>
+                <div class="ocr-button-container">
+                    <button type="button" id="conclusionOcrBtn" class="btn btn-primary">
+                        <i class="fas fa-magic me-2"></i>Extract Text from Uploaded Images
+                    </button>
+                    <div id="conclusionOcrLoading" class="spinner-border text-primary" role="status"
+                        style="display:none;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div id="conclusionOcrOutput" class="mt-3 generated-output" style="display: none;">
+                    <strong>Extracted Text:</strong> <span id="conclusionOcrText"></span>
+                </div>
                 <textarea name="conclusion" id="conclusionText" class="form-control-plaintext" rows="4" required
                     placeholder="This is the conclusion of the blog post. It should summarize the key points and offer a final thought or call to action. (Click 'Generate Conclusion' to get a new one!)"></textarea>
-                <button id="generateConclusionBtn" class="btn btn-primary mt-2">✨ Generate Conclusion</button>
+                <button id="generateConclusionBtn" type="button" class="btn btn-primary mt-2">✨ Generate Conclusion</button>
                 <div id="conclusionOutput" class="mt-3 generated-output" style="display: none;">
                     <strong>Generated Conclusion:</strong> <span id="generatedConclusionText"></span>
                     <div id="conclusionLoading" class="spinner-border spinner-border-sm text-primary" role="status"
@@ -76,7 +172,7 @@
                     </div>
                 </div>
             </section>
-            </section>
+
             <div class="d-flex justify-content-end mt-4">
                 <button type="submit" id="createPostBtn" class="btn btn-primary custom-btn">
                     <i class="fas fa-paper-plane me-2"></i>Publish
@@ -84,17 +180,117 @@
             </div>
         </form>
     </main>
-    </form>
-    </main>
     {% include 'format/footer.html' %}
     {% include 'quick-load/load-js.html' %}
-    <script>
+    <!-- <script>
         window.AppConfig = {
             GEMINI_API_KEY: "{{ gemini_api_key }}",
             GEMINI_API_URL: "{{ gemini_api_url }}"
         };
+    </script> -->
+    <script>
+        window.AppUrls = {
+            geminiProxy: "{% url 'gemini_proxy' %}",
+            csrfToken: "{{ csrf_token }}"
+        };
     </script>
+
     <script src="{% static 'js/post-customization/standard-blog-post.js' %}"></script>
+    <script>
+        // Convert File to Base64 and strip the "data:..." prefix
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const result = reader.result;
+                    const base64 = result.split(",")[1]; // remove prefix
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Function to handle OCR via Django endpoint
+        async function runOcr(imageInputId, loadingSpinnerId, outputContainerId, outputTextId) {
+            const imageInput = document.getElementById(imageInputId);
+            const loadingSpinner = document.getElementById(loadingSpinnerId);
+            const outputContainer = document.getElementById(outputContainerId);
+            const outputText = document.getElementById(outputTextId);
+
+            const files = imageInput.files;
+            if (files.length === 0) {
+                outputText.textContent = "Please upload an image first.";
+                outputContainer.style.display = 'block';
+                return;
+            }
+
+            // Reset UI
+            outputContainer.style.display = 'none';
+            loadingSpinner.style.display = 'inline-block';
+            outputText.textContent = "";
+
+            try {
+                const ocrResults = [];
+
+                for (const file of files) {
+                    const base64Data = await fileToBase64(file);
+
+                    console.log("Sending OCR request:", {
+                        fileType: file.type,
+                        base64Length: base64Data.length,
+                        base64Preview: base64Data.substring(0, 50)
+                    });
+
+                    const response = await fetch("{% url 'run_ocr' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({
+                            image: base64Data,
+                            mimeType: file.type
+                        })
+                    });
+
+                    const result = await response.json().catch(() => ({}));
+
+                    if (response.ok && result.text) {
+                        ocrResults.push(result.text);
+                    } else if (result.error) {
+                        ocrResults.push(`OCR failed: ${result.error}`);
+                    } else {
+                        ocrResults.push("OCR failed: Unknown issue.");
+                    }
+                }
+
+                outputText.textContent = ocrResults.join('\n\n');
+                outputContainer.style.display = 'block';
+            } catch (error) {
+                console.error("Error during OCR:", error);
+                outputText.textContent = "An error occurred during OCR.";
+                outputContainer.style.display = 'block';
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        // Attach event listeners
+        document.getElementById('introOcrBtn').addEventListener('click', () => {
+            runOcr('introImageInput', 'introOcrLoading', 'introOcrOutput', 'introOcrText');
+        });
+
+        document.getElementById('mainOcrBtn').addEventListener('click', () => {
+            runOcr('mainImageInput', 'mainOcrLoading', 'mainOcrOutput', 'mainOcrText');
+        });
+
+        document.getElementById('conclusionOcrBtn').addEventListener('click', () => {
+            runOcr('conclusionImageInput', 'conclusionOcrLoading', 'conclusionOcrOutput', 'conclusionOcrText');
+        });
+    </script>
+
+
 
     <!-- Fullscreen Image Preview Modal -->
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
@@ -112,7 +308,6 @@
             </div>
         </div>
     </div>
-
 </body>
 
 </html>

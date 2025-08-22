@@ -496,11 +496,12 @@ textarea.form-control:focus {
     border-radius: 0.75rem;
     transition: all 0.3s ease;
     box-shadow: 0 6px 12px rgba(111, 66, 193, 0.4);
-     /* Required for border-image to work */
-    border: 5px solid transparent; 
+    /* Required for border-image to work */
+    border: 5px solid transparent;
     border-image-source: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
     border-image-slice: 1;
-    border-image-repeat: stretch; /* Optional, helps with full coverage */
+    border-image-repeat: stretch;
+    /* Optional, helps with full coverage */
 }
 
 .publish-btn {
@@ -570,3 +571,4 @@ textarea.form-control:focus {
 }
 
 /* End of Infographic Post Styles */
+
