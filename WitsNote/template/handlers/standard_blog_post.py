@@ -2,7 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from ..base_handler import BasePostHandler
 from WitsNote.models import Post, PostImage
-from WitsNote.utils import ListOfSections as section
+from WitsNote.utils import HelperMethods, ListOfSections as section
+
 
 class StandardBlogPostHandler(BasePostHandler):
     
@@ -17,7 +18,10 @@ class StandardBlogPostHandler(BasePostHandler):
         # }
     
     def process_post(self) -> HttpResponse:
-        
+
+        helper = HelperMethods()
+        is_authenticated = helper.get_user_authentication_status(self.request)
+
         # Implement the logic for processing a standard blog post
         if self.request.method == "POST":
             title = self.request.POST.get("title", "")
@@ -42,7 +46,7 @@ class StandardBlogPostHandler(BasePostHandler):
             self.__save_images(post, main_image, section=section.MC)
             self.__save_images(post, conclusion_image, section=section.CONC)
 
-            return render(self.request, "create-post-home.html")
+            return render(self.request, "create-post-home.html", {"show_feedback_btn": is_authenticated})
         else:
             return render(self.request, "standard-blog-post.html")
 

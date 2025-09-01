@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 import os
 from users.models import PostCollection as Collection
@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST, require_http_methods
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.conf import settings
 import json
 from django.urls import reverse
@@ -27,9 +27,14 @@ class WitsNoteView:
             
         } 
 
-    def __set_author(self, request):
+    ''' Helper Methods '''
+    def get_user_authentication(self, request):
+        return request.user.is_authenticated
+
+    def __set_author(self, request) -> None:
         self.context['author'] = request.user.username
 
+    ''' End of Helper Methods '''
 
     def index(self, request):
         query = request.GET.get('q')
@@ -212,17 +217,18 @@ class WitsNoteView:
             return self.post_dispatcher(request, 'case_study_blog_post')
         else:
             self.__set_author(request)
-            return render(request, "case-study-post.html", self.context)
+            # return render(request, "case-study-post.html", self.context)
+            return redirect(request, "create_post", self.context)
 
     # Handle the standard blog post creation
     @method_decorator(require_http_methods(["GET", "POST"]), name='standard_blog_post')
-    def create_standard_blog_post(self, request):
+    def create_standard_blog_post(self, request: HttpRequest) -> HttpResponse:
         if request.method == "POST":
             return self.post_dispatcher(request, "standard_blog_post")
         else:
             self.__set_author(request)
             return render(request, "standard-blog-post.html", self.context)
-        
+
     # Handle the listicle post creation
     @method_decorator(require_http_methods(["GET", "POST"]), name='listicle_blog_post')
     def create_listicle_post(self, request):

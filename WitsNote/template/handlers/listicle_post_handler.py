@@ -1,10 +1,13 @@
 from WitsNote.template.base_handler import BasePostHandler
 from WitsNote.models import Post, PostImage
 from django.shortcuts import render
-from WitsNote.utils import ListOfSections as section
+from WitsNote.utils import HelperMethods, ListOfSections as section
 
 class ListiclePostHandler(BasePostHandler):
     def process_post(self):
+        helper = HelperMethods()
+        is_authenticated = helper.get_user_authentication_status(self.request)
+        
         if self.request.method == "POST":
             title = self.request.POST.get("title")
             introduction = self.request.POST.get("introduction")
@@ -21,7 +24,7 @@ class ListiclePostHandler(BasePostHandler):
             self.__save_images(post, main_image, section.MC)
             self.__save_images(post, conclusion_image, section.CONC)
             
-            return render(self.request, "create-post-home.html")
+            return render(self.request, "create-post-home.html", {"show_feedback_btn": is_authenticated})
         
         else:
             return render(self.request, "listicle-post.html")

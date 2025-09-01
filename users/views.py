@@ -42,7 +42,7 @@ class UserProfileView:
             work_link = request.POST.get("work_link")
             skills = request.POST.get("skills")
 
-            phone_encryption = self.__cipher.encrypt(phone.encode())
+            phone_encryption = self.__cipher.encrypt(phone.encode()).decode()
 
             return self.create_profile(request, phone_encryption, profession, work_link, skills)
         return render(request, "profile_setup.html")

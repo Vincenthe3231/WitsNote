@@ -27,7 +27,6 @@ urlpatterns = [
     path('', include('WitsNote.urls')),
     path('user/', include('users.urls')),
     path('auth/', include('Authentication.urls')),
-    # path('posts/', include('Post.urls')),
     path('summarization/', include('AI_Summarization.urls'))
 ]
 

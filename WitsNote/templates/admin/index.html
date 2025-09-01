@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% load admin_analytics %}
+
+{% block title %}{% trans 'Site administration' %}{% endblock %}
+
+{% block content_title %}
+  {% if site_header %}{{ site_header }}{% else %}{% trans 'Site administration' %}{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+</div>
+{% endblock %}
+
+{% block content %}
+  <!-- Our analytics widget goes first -->
+  <div id="content-main">
+    {% admin_post_analytics %}
+
+    <!-- Default app list below -->
+    {% include "admin/app_list.html" with app_list=app_list %}
+  </div>
+{% endblock %}

@@ -13,6 +13,9 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"[{self.user.id}]-[{self.user.first_name} {self.user.last_name}]"
+    
+    class Meta:
+        db_table = "users_userprofile"
 
 class PostCollection(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
