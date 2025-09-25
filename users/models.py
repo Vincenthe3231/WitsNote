@@ -7,8 +7,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     phone = models.CharField(max_length=200)
     profession = models.CharField(max_length=40)
-    work_link = models.URLField(max_length=200, help_text="Link to portfolio or LinkedIn")
+    work_link = models.TextField(default="[]", blank=True)
     skills = models.TextField(help_text="Comma-separated skills (e.g. Python, Django, REST)")
+    profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
