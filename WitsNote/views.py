@@ -200,7 +200,7 @@ class WitsNoteView:
     
     def post_detail(self, request, slug):
         post = get_object_or_404(
-            Post.objects.prefetch_related("images", "subheadings"),
+            Post.objects.prefetch_related("images", "subheadings", "infographic_sections"),
             slug=slug
         )
         self.__set_author(request)

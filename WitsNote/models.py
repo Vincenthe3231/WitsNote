@@ -117,3 +117,15 @@ class ListicleSubheading(models.Model):
 
     def __str__(self):
         return f"{self.order}. {self.title}"
+    
+class InfographicSection(models.Model):
+    post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="infographic_sections")
+    title = models.CharField(max_length=255)
+    content = models.TextField(blank=True, default="")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return f"{self.order}. {self.title}"

@@ -2,22 +2,46 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ post.title }}</title>
+    <!-- Keep same styling as create template -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/blog-post-alignment.css' %}">
-    {% include '../quick-load/load-style.html' %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
+    {% include 'quick-load/load-style.html' %}
 </head>
-<body id="top">
-    {% include '../format/navbar.html' %}
-    <main class="container my-5">
-        <div class="post-content">
-            {{ post.content }}
-        </div>
-    </main>
 
-    {% include '../format/footer.html' %}
-    {% include '../quick-load/load-js.html' %}
+<body id="top">
+    {% include 'format/navbar.html' %}
+    {% include 'format/header.html' %}
+
+    <div class="container container-infographic">
+        
+        <main class="container my-5">
+            <h1 class="text-center mb-5">{{ post.title }}</h1>
+            <div id="infographic-sections-container">
+                {% for section in post.infographic_sections.all %}
+                <div class="infographic-section">
+                    <div class="d-flex flex-column flex-md-row align-items-md-start">
+                        <div class="section-number mb-3 mb-md-0">{{ forloop.counter }}</div>
+                        <div class="section-content w-100">
+                            <h2 class="mb-3 section-title">{{ section.title }}</h2>
+                            <p class="section-textarea text-justify">{{ section.content|linebreaks }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+
+    {% include 'format/footer.html' %}
+    {% include 'quick-load/load-js.html' %}
 </body>
+
 </html>
