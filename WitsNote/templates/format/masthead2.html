@@ -40,24 +40,36 @@
     }
 
     @media (max-width: 576px) {
-    .header-meta {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
+        .header-meta {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
     }
-}
-
 </style>
 
 <div class="masthead-container">
-    <textarea name="title" id="blogPostTitle" class="custom-title-input" placeholder="Blog Post Title" required autofocus></textarea>
+    {% if title %}
+    <h1 class="text-center mb-5">{{ post.title }}</h1>
+    {% else %}
+    <textarea name="title" id="blogPostTitle" class="custom-title-input" placeholder="Blog Post Title" required
+        autofocus></textarea>
+    {% endif %}
 
     <div class="header-meta-row">
         <div class="header-meta">
             <div class="author-info">
+                {% if author %}
                 <span>Author: {{ author }}</span>
+                {% else %}
+                <span>Author: {{ post.author.username }}</span>
+                {% endif %}
             </div>
+            {% if datetime %}
+            <span class="text-muted published-date">Published at: {{ datetime|date:"F j, Y H:i:s" }} GMT+8</span>
+            {% else %}
             <span class="text-muted published-date" id="publishedDate"></span>
+            {% endif %}
         </div>
     </div>
 </div>

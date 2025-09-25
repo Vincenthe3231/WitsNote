@@ -204,7 +204,7 @@ class WitsNoteView:
             slug=slug
         )
         self.__set_author(request)
-        return render(request, "post-detail.html", {"post": post})
+        return render(request, "post-detail.html", {"post": post, "title": post.title, "datetime": post.created_at})
 
     
     def create_post(self, request):

@@ -1,12 +1,25 @@
 <!--masthead.html-->
 
 <h1 class="fw-bold">
-    <textarea name="title" id="blogPostTitle" class="form-control-plaintext fs-1 fw-bold p-0 custom-title-input" placeholder="Blog Post Title" required autofocus></textarea>
+    {% if title %}
+        <h1 class="text-center mb-5">{{ post.title }}</h1>
+    {% else %}
+        <textarea name="title" id="blogPostTitle" class="custom-title-input" placeholder="Blog Post Title" required
+        autofocus></textarea>
+    {% endif %}
 </h1>
 <div class="header-meta">
     <div class="author-info">
-        <span>Author: {{ author }}</span>
+        {% if author %}
+            <span>Author: {{ author }}</span>
+        {% else %}
+            <span>Author: {{ post.author.username }}</span>
+        {% endif %}
     </div>
-    <span class="text-muted published-date" id="publishedDate"></span>
+    {% if datetime %}
+        <span class="text-muted published-date">Published at: {{ datetime|date:"F j, Y H:i:s" }} GMT+8</span>
+    {% else %}
+        <span class="text-muted published-date" id="publishedDate"></span>
+    {% endif %}
 </div>
 <hr>

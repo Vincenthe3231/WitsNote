@@ -21,9 +21,8 @@
     {% include 'format/header.html' %}
 
     <div class="container container-infographic">
-        
+        {% include 'format/masthead2.html' %}
         <main class="container my-5">
-            <h1 class="text-center mb-5">{{ post.title }}</h1>
             <div id="infographic-sections-container">
                 {% for section in post.infographic_sections.all %}
                 <div class="infographic-section">
