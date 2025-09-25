@@ -125,14 +125,23 @@ textarea.form-control-subcontent:focus {
 
 .custom-title-input {
     text-shadow: 1px 2px 1px black;
+    border: none;
+    outline: none;
+    resize: none;
 }
 
 .custom-title-input:active {
     text-shadow: none;
+    border: none;
+    outline: none;
+    resize: none;
 }
 
 #blogPostTitle {
     text-indent: 0em;
+    /* border: none;
+    outline: none;
+    resize: none; */
 }
 
 #createPostBtn {
@@ -200,6 +209,9 @@ h1 {
     margin-bottom: 25px;
     text-align: center;
     line-height: 1.2;
+    /* border: none;
+    outline: none;
+    resize: none; */
 }
 
 h2 {

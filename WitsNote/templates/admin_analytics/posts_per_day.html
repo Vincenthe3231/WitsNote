@@ -1,0 +1,26 @@
+{% load i18n %}
+<div class="module">
+    <h2>{% translate 'Post Creation Analytics (Last 7 Days)' %}</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="text-align: left; padding: 5px; border-bottom: 1px solid #ccc;">{% translate 'Date' %}</th>
+                <th style="text-align: right; padding: 5px; border-bottom: 1px solid #ccc;">{% translate 'Posts Created' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in daily_posts %}
+            <tr>
+                <td style="padding: 5px; border-bottom: 1px dotted #ccc;">{{ entry.date }}</td>
+                <td style="text-align: right; padding: 5px; border-bottom: 1px dotted #ccc;">
+                    <strong>{{ entry.count }}</strong>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" style="padding: 5px;">{% translate 'No posts created in the last 7 days.' %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -20,7 +20,7 @@ class ListiclePostHandler(BasePostHandler):
             main_image = self.request.FILES.getlist("main_images")
             conclusion_image = self.request.FILES.getlist("conclusion_images")
             
-            post = self.__save_post(title, introduction, main_content, conclusion, post_type, user)
+            post = self.__save_post(title, introduction, main_content, conclusion, user, post_type)
             self.__save_images(post, intro_image, section.INTRO.value)
             self.__save_images(post, main_image, section.MC.value)
             self.__save_images(post, conclusion_image, section.CONC.value)
@@ -34,15 +34,15 @@ class ListiclePostHandler(BasePostHandler):
             return render(self.request, "listicle-post.html")
             
             
-    def __save_post(self, title, introduction, main_content, conclusion, user):
+    def __save_post(self, title, introduction, main_content, conclusion, user, post_type="Listicle"):
         post = Post.objects.create(
             title=title,
             introduction=introduction,
             content=main_content,
             conclusion=conclusion,
-            author=user
+            author=user,
+            post_type=post_type
         )
-        
         return post
     
     def __save_subheadings(self, post):

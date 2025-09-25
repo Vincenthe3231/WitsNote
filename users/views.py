@@ -22,8 +22,19 @@ class UserProfileView:
 
     @method_decorator(require_GET, name='user_profile')
     def user_profile(self, request):
-        profiles = UserProfile.objects.get(user=request.user)
+        try:
+            profiles = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            # No profile yet → go straight to setup page
+            return redirect("profile_setup")
+
         users = request.user
+
+        # Check for empty required fields
+        required_fields = [profiles.phone, profiles.profession, profiles.work_link, profiles.skills]
+        if any(not field for field in required_fields):
+            return redirect("profile_setup")
+            # return render(request, "profile_setup.html")
 
         # Decrypt phone number
         phone_decryption = self.__cipher.decrypt(profiles.phone).decode()
@@ -50,7 +61,8 @@ class UserProfileView:
             'work_links': work_links,
             'skills': skills,
             'profile_picture': profile_picture
-        })
+    })
+
 
     @method_decorator(login_required, name='profile_setup')
     def profile_setup(self, request):
@@ -62,11 +74,17 @@ class UserProfileView:
 
             phone_encryption = self.__cipher.encrypt(phone.encode()).decode()
 
-            if not work_link.startswith(("http://", "https://")):
-                work_link = f"http://{work_link}"
+            # Handle work_link properly
+            if work_link:
+                if not work_link.startswith(("http://", "https://")):
+                    work_link = f"http://{work_link}"
+            else:
+                work_link = "[]"  # empty JSON array as default
 
             return self.create_profile(request, phone_encryption, profession, work_link, skills)
+
         return render(request, "profile_setup.html")
+
 
     def create_profile(self, request, phone, profession, work_link, skills):
         # Save the user profile information
