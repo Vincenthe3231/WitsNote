@@ -23,6 +23,34 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    @property
+    def intro_images(self):
+        return self.images.filter(section__in=["introduction"])
+
+    @property
+    def main_images(self):
+        return self.images.filter(section__in=["main_content", "ListOfSections.MAIN"])
+
+    @property
+    def conclusion_images(self):
+        return self.images.filter(section__in=["conclusion", "ListOfSections.CONCLUSION"])
+    
+    @property
+    def literature_review_images(self):
+        return self.images.filter(section__in=["literature_review"])
+
+    @property
+    def methodology_images(self):
+        return self.images.filter(section__in=["methodology"])
+
+    @property
+    def results_images(self):
+        return self.images.filter(section__in=["results"])
+
+    @property
+    def discussion_images(self):
+        return self.images.filter(section__in=["discussion"])
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -51,6 +79,21 @@ class PostImage(models.Model):
     section = models.CharField(max_length=50)   # introduction, main content, conclusion
     uploaded_at = models.DateTimeField(auto_now_add=True)
     
+    def save(self, *args, **kwargs):
+        # normalize section before save
+        mapping = {
+            "Introduction": "introduction",
+            "Main Content": "main_content",
+            "Conclusion": "conclusion",
+            "Literature Review": "literature_review",
+            "Methodology": "methodology",
+            "Results": "results",
+            "Discussion": "discussion",
+        }
+        if self.section in mapping:
+            self.section = mapping[self.section]
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         queries = []
         if self.post.id == 1:
@@ -62,3 +105,15 @@ class PostImage(models.Model):
         else:
             queries.append(f"Image for {self.post.id}th - {self.section}")
         return ", ".join(queries)
+    
+class ListicleSubheading(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="subheadings")
+    title = models.CharField(max_length=255)
+    content = models.TextField(default="")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return f"{self.order}. {self.title}"

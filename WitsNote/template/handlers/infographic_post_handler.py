@@ -8,6 +8,7 @@ class InfographicPostHandler(BasePostHandler):
     def process_post(self):
         helper = HelperMethods()
         is_authenticated = helper.get_user_authentication_status(self.request)
+        post_type = "infographic"
 
         if self.request.method == "POST":
             titles = self.request.POST.getlist("section_titles[]")

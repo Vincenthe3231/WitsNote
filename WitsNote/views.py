@@ -198,11 +198,14 @@ class WitsNoteView:
         return render(request, "blog-post-home.html", context)
 
     
-    # Fetch post with its related images in one go
     def post_detail(self, request, slug):
-        post = get_object_or_404(Post.objects.prefetch_related('images'), slug=slug)
+        post = get_object_or_404(
+            Post.objects.prefetch_related("images", "subheadings"),
+            slug=slug
+        )
         self.__set_author(request)
-        return render(request, "post-detail.html", {'post': post})
+        return render(request, "post-detail.html", {"post": post})
+
     
     def create_post(self, request):
         show_feedback_btn = True
@@ -233,7 +236,7 @@ class WitsNoteView:
     @method_decorator(require_http_methods(["GET", "POST"]), name='listicle_blog_post')
     def create_listicle_post(self, request):
         if request.method == "POST":
-            return self.post_dispatcher(request, "listicle_post")
+            return self.post_dispatcher(request, "listicle_blog_post")
         else:
             self.__set_author(request)
             return render(request, "listicle-post.html", self.context)
@@ -252,7 +255,7 @@ class WitsNoteView:
         handlers = {
             'standard_blog_post': StandardBlogPostHandler,
             'case_study_post': CaseStudyPostHandler,
-            'listicle_post': ListiclePostHandler,
+            'listicle_blog_post': ListiclePostHandler,
             'infographic_blog_post': InfographicPostHandler
         }
 

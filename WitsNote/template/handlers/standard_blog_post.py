@@ -42,9 +42,9 @@ class StandardBlogPostHandler(BasePostHandler):
             post = self.__save_post(title, introduction, main_content, conclusion, user)
             
             # Save the uploaded images
-            self.__save_images(post, intro_image, section=section.INTRO)
-            self.__save_images(post, main_image, section=section.MC)
-            self.__save_images(post, conclusion_image, section=section.CONC)
+            self.__save_images(post, intro_image, section=section.INTRO.value)
+            self.__save_images(post, main_image, section=section.MC.value)
+            self.__save_images(post, conclusion_image, section=section.CONC.value)
 
             return render(self.request, "create-post-home.html", {"show_feedback_btn": is_authenticated})
         else:
