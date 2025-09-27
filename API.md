@@ -23,18 +23,22 @@ Accepts authenticated POST requests from WitsNote to create blog posts
 
 Use Django REST Framework (DRF) to create APIs.
 
+```
 pip install djangorestframework
+```
 
 
 Add to INSTALLED_APPS:
 
+```
 'rest_framework',
 'rest_framework.authtoken',
+```
 
 
 Run migrations:
 
-python manage.py migrate
+```python manage.py migrate```
 
 🔐 2. Firebase Authentication Integration
 
@@ -44,7 +48,7 @@ Firebase users authenticate using Firebase ID Tokens.
 
 When the user signs in:
 
-String idToken = await FirebaseAuth.instance.currentUser.getIdToken();
+```String idToken = await FirebaseAuth.instance.currentUser.getIdToken();```
 
 
 Then, send this token to your Django API.
@@ -53,22 +57,23 @@ Then, send this token to your Django API.
 
 Install Firebase Admin SDK:
 
-pip install firebase-admin
-
+```pip install firebase-admin```
 
 Initialize Firebase in Django:
 
 # settings.py or a separate firebase.py file
+```
 import firebase_admin
 from firebase_admin import credentials
 
 cred = credentials.Certificate("path/to/serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
+```
 
-
-Create a custom DRF Authentication class to verify Firebase tokens:
+# Create a custom DRF Authentication class to verify Firebase tokens:
 
 # firebase_auth.py
+```
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 import firebase_admin
@@ -95,20 +100,23 @@ class FirebaseAuthentication(BaseAuthentication):
         user, _ = User.objects.get_or_create(username=uid)
         return (user, None)
 
+```
 
 Register it in settings.py:
-
+```
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'path.to.firebase_auth.FirebaseAuthentication',
     ],
 }
+```
 
 🧾 3. Blog Publishing API Endpoint
 
 Create an API endpoint in Django to receive a note from WitsNote and save it as a blog post.
 
 # views.py
+```
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -134,8 +142,10 @@ from .views import PublishNoteView
 urlpatterns = [
     path('api/publish/', PublishNoteView.as_view(), name='publish_note'),
 ]
+```
 
 🔄 4. Example Flutter HTTP Request
+```
 import 'package:http/http.dart' as http;
 
 Future<void> publishNote(String title, String content) async {
@@ -160,6 +170,7 @@ Future<void> publishNote(String title, String content) async {
     print('Error: ${response.body}');
   }
 }
+```
 
 🛡️ 5. Security Considerations
 
@@ -189,8 +200,3 @@ Flutter → Django Communication	HTTP + Bearer Token
 If you'd like, I can scaffold some boilerplate code (models, serializers, etc.) or show how to auto-create users from Firebase fields.
 
 Let me know how far along you are with the Django API and if you want to extend this to syncing notes, editing, or multi-user support.
-
-Attach
-Search
-Study
-Voice
