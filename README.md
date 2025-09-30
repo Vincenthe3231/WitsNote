@@ -50,4 +50,11 @@ python manage.py createsuperuser
 ```
 python manage.py runserver
 ```
-Admin credentials (test): admin / admin123   <-- only if you included an account; otherwise instruct to create one
+
+7) Admin credentials (test)
+
+Django superuser account:
+- Username: admin
+- Password: admin123
+
+Note: Update .env with your MySQL username and password. Default local setup assumes USER=dbuser and PASSWORD=dbpassword.
