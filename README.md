@@ -1,6 +1,53 @@
-# WitsNote
+# WitsNote — Setup Guide
 
-06/06/25
+Prereqs:
+- Python 3.8+ (or your version)
+- pip, virtualenv / pipenv
+- MySQL (or follow Docker instructions)
 
-# Added profile_setup.html and Modified User model
-## Need to implement Login and Signup view to complete the full flow
+1) Create a working environment
+# Using venv (Linux/macOS)
+```
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+# Using Windows PowerShell
+```
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+2) Database
+# Option A: Import SQL dump
+```mysql -u dbuser -p witsnote < witsnote.sql```
+
+# Option B: Create DB and run Django migrations (recommended)
+```
+CREATE DATABASE witsnote;
+python manage.py migrate
+```
+
+3) Environment variables
+```
+cp .env.example .env
+```
+# Edit .env and fill values
+
+4) Static files
+```
+python manage.py collectstatic
+```
+
+5) Create an admin user (if needed)
+```
+python manage.py createsuperuser
+```
+
+6) Run
+```
+python manage.py runserver
+```
+Admin credentials (test): admin / admin123   <-- only if you included an account; otherwise instruct to create one
