@@ -25,6 +25,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('WitsNote.urls')),
+    path('api/', include('firebase_integration.urls')),
     path('user/', include('users.urls')),
     path('auth/', include('Authentication.urls')),
     path('summarization/', include('AI_Summarization.urls'))

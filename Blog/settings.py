@@ -56,8 +56,15 @@ INSTALLED_APPS = [
     'WitsNote',
     'users',
     'Authentication',
+    'firebase_integration',
     
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "firebase_integration.auth.FirebaseAuthentication",
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

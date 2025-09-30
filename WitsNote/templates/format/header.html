@@ -34,6 +34,7 @@
                 e.preventDefault();
 
                 fetch("{% url 'redirect_to_feedback_form' %}", {
+
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

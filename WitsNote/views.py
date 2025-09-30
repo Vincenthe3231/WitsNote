@@ -1,3 +1,5 @@
+# WitsNote/views.py
+
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 import os
@@ -293,19 +295,18 @@ class WitsNoteView:
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
         
-    @method_decorator(login_required, name='redirect_to_feedback_form')
-    @method_decorator(require_POST, name='redirect_to_feedback_form')
-    def redirect_to_feedback_form(self, request):
-        try:
-            data = json.loads(request.body)
+@login_required
+@require_POST
+def redirect_to_feedback_form(request):
+    try:
+        data = json.loads(request.body)
 
-            # Optional: check for specific keys in the payload
-            if data.get("trigger"):
-                # Return the URL of the feedback form as a JSON response
-                feedback_url = reverse('contact')  # Make sure this URL name exists
-                return JsonResponse({'redirect_url': feedback_url})
-            else:
-                return JsonResponse({'error': 'Invalid request data'}, status=400)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+        if data.get("trigger"):
+            feedback_url = reverse('contact')  # or use hardcoded "/contact/"
+            return JsonResponse({'redirect_url': feedback_url})
+        else:
+            return JsonResponse({'error': 'Invalid request data'}, status=400)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 

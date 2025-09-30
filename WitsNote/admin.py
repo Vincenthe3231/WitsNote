@@ -6,7 +6,7 @@ from django.utils.timezone import is_naive, make_aware
 from django.db.models import Count
 from zoneinfo import ZoneInfo
 from django.db.models.functions import TruncDay
-import pytz
+import pytz # type: ignore
     
 class ListicleSubheadingInline(admin.TabularInline):
     model = ListicleSubheading
