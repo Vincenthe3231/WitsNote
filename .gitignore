@@ -6,3 +6,15 @@
 
 # Firebase service account key
 serviceAccountKey.json
+
+# Python cache directories
+__pycache__/
+
+# pytest cache
+.pytest_cache/ 
+
+# mypy cache
+.mypy_cache/
+
+# SQLite database
+db.sqlite3
