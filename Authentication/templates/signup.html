@@ -147,31 +147,119 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector("form");
+            const password = document.getElementById("password");
+            const confirmPassword = document.getElementById("confirm_password");
+            const passwordError = document.getElementById("password-error");
             const usernameField = document.getElementById("username");
-            const errorBox = document.createElement("p");
-            errorBox.className = "text-red-500 text-sm mt-1 hidden";
-            usernameField.parentNode.appendChild(errorBox);
+            const usernameError = document.getElementById("username-error");
+            const emailField = document.getElementById("email");
 
-            usernameField.addEventListener("blur", async () => {
-                const username = usernameField.value.trim();
-                if (!username) return;
+            // Create email error element dynamically (below email input)
+            const emailError = document.createElement("p");
+            emailError.id = "email-error";
+            emailError.className = "text-red-500 text-sm mt-1 hidden";
+            emailField.insertAdjacentElement("afterend", emailError);
 
-                const response = await fetch("{% url 'check_username' %}" + "?username=" + encodeURIComponent(username));
-                const data = await response.json();
-
-                if (data.exists) {
-                    errorBox.textContent = "Username already exists.";
-                    errorBox.classList.remove("hidden");
-                    usernameField.classList.add("border-red-500");
+            // ✅ Password validation
+            function validatePasswords() {
+                if (password.value && confirmPassword.value && password.value !== confirmPassword.value) {
+                    passwordError.classList.remove("hidden");
+                    confirmPassword.classList.add("border-red-500");
+                    return false;
                 } else {
-                    errorBox.classList.add("hidden");
-                    usernameField.classList.remove("border-red-500");
+                    passwordError.classList.add("hidden");
+                    confirmPassword.classList.remove("border-red-500");
+                    return true;
+                }
+            }
+
+            // ✅ Username validation (async)
+            async function validateUsername() {
+                const username = usernameField.value.trim();
+                if (!username) {
+                    usernameError.textContent = "Username is required.";
+                    usernameError.classList.remove("hidden");
+                    usernameField.classList.add("border-red-500");
+                    return false;
+                }
+
+                try {
+                    const response = await fetch(
+                        "{% url 'check_username' %}" + "?username=" + encodeURIComponent(username)
+                    );
+                    const data = await response.json();
+
+                    if (data.exists) {
+                        usernameError.textContent = "Username already exists.";
+                        usernameError.classList.remove("hidden");
+                        usernameField.classList.add("border-red-500");
+                        return false;
+                    } else {
+                        usernameError.classList.add("hidden");
+                        usernameField.classList.remove("border-red-500");
+                        return true;
+                    }
+                } catch (err) {
+                    console.error("Username check failed:", err);
+                    return false;
+                }
+            }
+
+            // ✅ Email validation (async)
+            async function validateEmail() {
+                const email = emailField.value.trim();
+                if (!email) {
+                    emailError.textContent = "Email is required.";
+                    emailError.classList.remove("hidden");
+                    emailField.classList.add("border-red-500");
+                    return false;
+                }
+
+                try {
+                    const response = await fetch(
+                        "{% url 'check_email' %}" + "?email=" + encodeURIComponent(email)
+                    );
+                    const data = await response.json();
+
+                    if (data.exists) {
+                        emailError.textContent = "Email already exists.";
+                        emailError.classList.remove("hidden");
+                        emailField.classList.add("border-red-500");
+                        return false;
+                    } else {
+                        emailError.classList.add("hidden");
+                        emailField.classList.remove("border-red-500");
+                        return true;
+                    }
+                } catch (err) {
+                    console.error("Email check failed:", err);
+                    return false;
+                }
+            }
+
+            // ✅ Live field checks
+            password.addEventListener("input", validatePasswords);
+            confirmPassword.addEventListener("input", validatePasswords);
+            usernameField.addEventListener("blur", validateUsername);
+            emailField.addEventListener("blur", validateEmail);
+
+            // ✅ Final check before submission
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault(); // Always block first
+
+                const passOk = validatePasswords();
+                const userOk = await validateUsername();
+                const emailOk = await validateEmail();
+
+                if (passOk && userOk && emailOk) {
+                    form.submit(); // ✅ only allow submission if everything is valid
+                } else {
+                    console.log("Form blocked: errors found");
                 }
             });
         });
     </script>
-
-
 
 </body>
 

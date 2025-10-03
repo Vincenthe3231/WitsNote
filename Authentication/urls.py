@@ -1,11 +1,10 @@
 from django.urls import path
-from .views import Authentication
-
-auth = Authentication()
+from .views import LoginView, LogoutView, RegisterView, CheckUsernameView, CheckEmailView
 
 urlpatterns = [
-    path('login/', auth.login, name='login'),
-    path('logout/', auth.logout, name='logout'),
-    path('register/', auth.register, name='register'),
-    path('check-username/', auth.check_username, name='check_username'),
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
+    path("register/", RegisterView.as_view(), name="register"),
+    path("check-username/", CheckUsernameView.as_view(), name="check_username"),
+    path("check-email/", CheckEmailView.as_view(), name="check_email"),
 ]
