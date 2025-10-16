@@ -71,7 +71,7 @@ class RegisterView(View):
             is_active=True,
         )
 
-        messages.success(request, "Account created successfully. Please log in.")
+        # messages.success(request, "Account created successfully. Please log in.")
         return redirect("login")
 
 class CheckUsernameView(View):
